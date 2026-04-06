@@ -1,0 +1,39 @@
+<div class="dashboard-container">
+  <div class="neon-box lg">
+    <div class="header">
+      <h2 class="neon-title">Panel Principal</h2>
+      <button class="neon-btn danger" (click)="logout()">Cerrar Sesión</button>
+    </div>
+
+    <div class="info-card">
+      <h3>Bienvenido, <span class="highlight">{{ currentUser?.name }}</span></h3>
+      <p>Entraste a las: <span class="highlight-info">{{ currentUser?.entryTimestamp | date:'medium' }}</span></p>
+      <p>Tiempo de sesión activo: <span class="highlight-info">{{ activeTimeSeconds }} segundos</span></p>
+    </div>
+
+    <h3 class="neon-subtitle">Registro Histórico de Visitantes</h3>
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Correo</th>
+            <th>Fecha/Hora Entrada</th>
+            <th>Duración</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let log of logs">
+            <td>{{ log.name }}</td>
+            <td>{{ log.email }}</td>
+            <td>{{ log.entryTime }}</td>
+            <td>{{ log.durationSeconds }} segundos</td>
+          </tr>
+          <tr *ngIf="logs.length === 0">
+            <td colspan="4" class="no-data">Aún no hay registros guardados. ¡Sé el primero en salir!</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,38 @@
+<div class="neon-container">
+  <div class="neon-box">
+    <h2 class="neon-title">Registro de Estudiante</h2>
+    
+    <div *ngIf="errorMessage" class="error-msg">{{ errorMessage }}</div>
+    
+    <form *ngIf="!generatedPassword" [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+      <div class="input-group">
+        <label>Nombre Completo</label>
+        <input type="text" formControlName="name" placeholder="Ej. Juan Pérez">
+      </div>
+
+      <div class="input-group">
+        <label>Edad</label>
+        <input type="number" formControlName="age" placeholder="20">
+      </div>
+
+      <div class="input-group">
+        <label>Correo Electrónico</label>
+        <input type="email" formControlName="email" placeholder="correo@ejemplo.com">
+      </div>
+
+      <button type="submit" class="neon-btn" [disabled]="registerForm.invalid">Generar Acceso</button>
+      
+      <div class="links">
+        <a (click)="goToLogin()">Ya tengo cuenta, iniciar sesión</a>
+      </div>
+    </form>
+
+    <div *ngIf="generatedPassword" class="success-box">
+      <h3>¡Registro Exitoso!</h3>
+      <p>Tu contraseña generada es:</p>
+      <div class="password-display">{{ generatedPassword }}</div>
+      <p class="warning-text">Guárdela, la necesitará para ingresar.</p>
+      <button class="neon-btn" (click)="goToLogin()">Ir al Login</button>
+    </div>
+  </div>
+</div>

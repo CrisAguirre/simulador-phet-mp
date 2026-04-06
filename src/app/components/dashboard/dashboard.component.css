@@ -1,0 +1,117 @@
+.dashboard-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  padding: 40px 10px;
+}
+
+.neon-box.lg {
+  background: rgba(10, 20, 45, 0.9);
+  padding: 40px;
+  border-radius: 10px;
+  border: 2px solid #0f0;
+  box-shadow: 0 0 10px #0f0, 0 0 20px #0f0, inset 0 0 15px rgba(0, 255, 0, 0.4);
+  width: 800px;
+  max-width: 95%;
+  color: white;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  border-bottom: 1px solid rgba(0, 255, 0, 0.3);
+  padding-bottom: 20px;
+}
+
+.neon-title {
+  font-size: 28px;
+  color: #0f0;
+  margin: 0;
+  text-shadow: 0 0 5px #0f0, 0 0 10px #0f0;
+}
+
+.neon-subtitle {
+  font-size: 20px;
+  color: #0f0;
+  margin-top: 30px;
+  margin-bottom: 15px;
+  text-shadow: 0 0 5px #0f0;
+}
+
+.neon-btn.danger {
+  padding: 10px 20px;
+  background: transparent;
+  border: 2px solid #ff0055;
+  color: #ff0055;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  text-transform: uppercase;
+  transition: 0.3s;
+  box-shadow: 0 0 5px #ff0055;
+  text-shadow: 0 0 5px #ff0055;
+}
+
+.neon-btn.danger:hover {
+  background: #ff0055;
+  color: #fff;
+  box-shadow: 0 0 15px #ff0055, 0 0 30px #ff0055;
+}
+
+.info-card {
+  background: rgba(0, 255, 0, 0.1);
+  border: 1px solid rgba(0, 255, 0, 0.3);
+  padding: 20px;
+  border-radius: 5px;
+  margin-bottom: 30px;
+}
+
+.info-card h3 {
+  margin-top: 0;
+}
+
+.highlight {
+  color: #0f0;
+  text-shadow: 0 0 5px #0f0;
+}
+
+.highlight-info {
+  color: #0ff;
+  font-weight: bold;
+  text-shadow: 0 0 5px #0ff;
+}
+
+.table-container {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid rgba(0, 255, 0, 0.2);
+}
+
+th {
+  color: #0f0;
+  text-transform: uppercase;
+  font-size: 14px;
+}
+
+tr:hover td {
+  background: rgba(0, 255, 0, 0.05);
+}
+
+.no-data {
+  text-align: center;
+  padding: 20px;
+  color: #aaa;
+  font-style: italic;
+}

@@ -1,0 +1,25 @@
+<div class="neon-container">
+  <div class="neon-box">
+    <h2 class="neon-title">Acceso Estudiantes</h2>
+    
+    <div *ngIf="errorMessage" class="error-msg">{{ errorMessage }}</div>
+    
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <div class="input-group">
+        <label>Correo Electrónico</label>
+        <input type="email" formControlName="email" placeholder="correo@ejemplo.com">
+      </div>
+
+      <div class="input-group">
+        <label>Contraseña Generada</label>
+        <input type="password" formControlName="password" placeholder="Tu contraseña">
+      </div>
+
+      <button type="submit" class="neon-btn" [disabled]="loginForm.invalid">Ingresar</button>
+      
+      <div class="links">
+        <a (click)="goToRegister()">No tengo cuenta, registrarme</a>
+      </div>
+    </form>
+  </div>
+</div>

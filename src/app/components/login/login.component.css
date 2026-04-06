@@ -1,0 +1,99 @@
+.neon-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+}
+
+.neon-box {
+  background: rgba(10, 20, 45, 0.9);
+  padding: 40px;
+  border-radius: 10px;
+  border: 2px solid #b026ff;
+  box-shadow: 0 0 10px #b026ff, 0 0 20px #b026ff, inset 0 0 15px rgba(176, 38, 255, 0.4);
+  width: 400px;
+  max-width: 90%;
+  color: white;
+}
+
+.neon-title {
+  text-align: center;
+  font-size: 24px;
+  margin-bottom: 30px;
+  color: #b026ff;
+  text-shadow: 0 0 5px #b026ff, 0 0 10px #b026ff;
+}
+
+.input-group {
+  margin-bottom: 20px;
+}
+
+.input-group label {
+  display: block;
+  margin-bottom: 5px;
+  color: #d896ff;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #b026ff;
+  background: transparent;
+  color: white;
+  border-radius: 5px;
+  outline: none;
+  transition: 0.3s;
+}
+
+.input-group input:focus {
+  box-shadow: 0 0 8px #b026ff;
+}
+
+.neon-btn {
+  width: 100%;
+  padding: 12px;
+  background: transparent;
+  border: 2px solid #b026ff;
+  color: #b026ff;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  text-transform: uppercase;
+  transition: 0.3s;
+  box-shadow: 0 0 5px #b026ff;
+  text-shadow: 0 0 5px #b026ff;
+}
+
+.neon-btn:hover:not(:disabled) {
+  background: #b026ff;
+  color: #fff;
+  box-shadow: 0 0 15px #b026ff, 0 0 30px #b026ff;
+}
+
+.neon-btn:disabled {
+  border-color: #555;
+  color: #555;
+  box-shadow: none;
+  text-shadow: none;
+  cursor: not-allowed;
+}
+
+.links {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.links a {
+  color: #d896ff;
+  cursor: pointer;
+  text-decoration: underline;
+  font-size: 14px;
+}
+
+.error-msg {
+  color: #ff0055;
+  text-align: center;
+  margin-bottom: 15px;
+  text-shadow: 0 0 5px #ff0055;
+}
