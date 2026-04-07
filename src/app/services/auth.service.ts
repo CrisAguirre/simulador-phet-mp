@@ -38,8 +38,11 @@ export class AuthService {
   register(userData: User): string {
     const users = this.getDbData(this.USERS_KEY);
     
+    // Normalize email
+    userData.email = userData.email.trim().toLowerCase();
+
     // Check if email already exists
-    if (users.find(u => u.email === userData.email)) {
+    if (users.find(u => u.email.trim().toLowerCase() === userData.email)) {
       throw new Error('El correo ya está registrado.');
     }
 
@@ -55,7 +58,13 @@ export class AuthService {
 
   login(email: string, password: string): User | null {
     const users = this.getDbData(this.USERS_KEY);
-    const user = users.find(u => u.email === email && u.password === password);
+    const normalizedEmail = email.trim().toLowerCase();
+    const normalizedPassword = password.trim();
+
+    const user = users.find(u => 
+      u.email.trim().toLowerCase() === normalizedEmail && 
+      u.password === normalizedPassword
+    );
     
     if (user) {
       // Create session
