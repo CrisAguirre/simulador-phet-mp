@@ -1,32 +1,254 @@
 <div class="taller-page">
+
+  <!-- ===== NAVBAR ===== -->
   <nav class="taller-nav">
     <button class="back-btn" (click)="goBack()">
-      ← Volver a Talleres
+      ← Volver
     </button>
     <h1 class="taller-nav-title">Tiro Parabólico — Movimiento de Proyectil</h1>
     <span class="badge-central">⭐ Módulo Central</span>
   </nav>
 
-  <main class="taller-content">
-    <!-- Aquí va tu contenido teórico, ejercicios y simulador -->
-    <section class="taller-hero">
-      <div class="hero-icon">🎯</div>
-      <h2>Taller de Tiro Parabólico</h2>
-      <p class="hero-desc">Movimiento de Proyectil — Contenido en construcción</p>
+  <!-- ===== HERO ===== -->
+  <header class="taller-hero">
+    <div class="hero-icon-big">🎯</div>
+    <h2 class="hero-main-title">Taller de Tiro Parabólico</h2>
+    <p class="hero-tagline">Comprende cómo se mueven los objetos lanzados al aire y descubre las leyes que gobiernan su trayectoria.</p>
+  </header>
+
+  <!-- ===== SECTION TABS ===== -->
+  <div class="section-tabs">
+    <button
+      class="tab-btn"
+      [class.active]="activeSection === 'teoria'"
+      (click)="setSection('teoria')">
+      📚 Teoría
+    </button>
+    <button
+      class="tab-btn"
+      [class.active]="activeSection === 'simulador'"
+      (click)="setSection('simulador')">
+      🧪 Simulador
+    </button>
+    <button
+      class="tab-btn"
+      [class.active]="activeSection === 'actividades'"
+      (click)="setSection('actividades')">
+      ✏️ Actividades
+    </button>
+  </div>
+
+  <!-- ============================================ -->
+  <!-- ===== SECCIÓN: TEORÍA ===== -->
+  <!-- ============================================ -->
+  <main class="taller-content" *ngIf="activeSection === 'teoria'">
+
+    <!-- Introducción -->
+    <section class="content-section intro-section">
+      <h3 class="section-title">¿Qué es el Tiro Parabólico?</h3>
+      <div class="intro-card">
+        <p>
+          Cuando lanzas una pelota, disparas un cañón o pateas un balón con cierto ángulo hacia arriba,
+          el objeto sigue una trayectoria curva que tiene forma de <strong>parábola</strong>.
+          Este tipo de movimiento se conoce como <strong>tiro parabólico</strong> o <strong>movimiento de proyectil</strong>.
+        </p>
+        <p>
+          Lo fascinante del tiro parabólico es que no es un solo movimiento, sino la
+          <strong>combinación simultánea de dos movimientos independientes</strong>:
+          uno horizontal (donde no hay aceleración) y uno vertical (donde actúa la gravedad).
+          Galileo Galilei fue el primero en describir este principio en el siglo XVII.
+        </p>
+      </div>
     </section>
 
-    <!-- Contenedor preparado para el simulador interactivo PhET -->
-    <section class="simulator-section">
-      <h3 class="section-title">Simulador Interactivo</h3>
-      <div class="simulator-container">
-        <!-- Inserta aquí tu iframe del simulador PhET -->
-        <!-- Ejemplo: <iframe src="URL_DEL_SIMULADOR" allowfullscreen></iframe> -->
-        <div class="simulator-placeholder">
-          <div class="placeholder-icon">🧪</div>
-          <p>Espacio reservado para el simulador PhET</p>
-          <span class="placeholder-hint">Reemplaza este bloque con tu &lt;iframe&gt;</span>
+    <!-- Conceptos Fundamentales -->
+    <section class="content-section">
+      <h3 class="section-title">Conceptos Fundamentales</h3>
+      <div class="concepts-grid">
+        <div class="concept-card" *ngFor="let concept of concepts">
+          <div class="concept-icon">{{ concept.icon }}</div>
+          <h4 class="concept-title">{{ concept.title }}</h4>
+          <p class="concept-desc">{{ concept.description }}</p>
         </div>
       </div>
     </section>
+
+    <!-- Componentes del movimiento -->
+    <section class="content-section">
+      <h3 class="section-title">Componentes del Movimiento</h3>
+      <div class="components-visual">
+        <div class="component-box horizontal">
+          <div class="comp-header">
+            <span class="comp-icon">➡️</span>
+            <h4>Eje Horizontal (X)</h4>
+          </div>
+          <ul class="comp-list">
+            <li>Movimiento Rectilíneo Uniforme (MRU)</li>
+            <li>La velocidad horizontal <strong>no cambia</strong></li>
+            <li>No hay aceleración en este eje</li>
+            <li>Vₓ = V₀ · cos(θ) = constante</li>
+          </ul>
+        </div>
+        <div class="component-divider">
+          <span class="divider-text">+</span>
+        </div>
+        <div class="component-box vertical">
+          <div class="comp-header">
+            <span class="comp-icon">⬆️</span>
+            <h4>Eje Vertical (Y)</h4>
+          </div>
+          <ul class="comp-list">
+            <li>Movimiento de Caída Libre</li>
+            <li>La velocidad vertical <strong>cambia</strong> constantemente</li>
+            <li>Aceleración = gravedad (g ≈ 9.8 m/s²)</li>
+            <li>Vᵧ = V₀ · sen(θ) − g · t</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Fórmulas -->
+    <section class="content-section">
+      <h3 class="section-title">Ecuaciones del Movimiento</h3>
+      <p class="section-desc">Haz clic en cada fórmula para ver su explicación detallada.</p>
+      <div class="formulas-list">
+        <div
+          class="formula-item"
+          *ngFor="let f of formulas; let i = index"
+          [class.expanded]="expandedFormula === i"
+          (click)="toggleFormula(i)">
+          <div class="formula-header">
+            <span class="formula-label">{{ f.label }}</span>
+            <span class="formula-expression">{{ f.formula }}</span>
+            <span class="formula-toggle">{{ expandedFormula === i ? '−' : '+' }}</span>
+          </div>
+          <div class="formula-body" *ngIf="expandedFormula === i">
+            <p>{{ f.meaning }}</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Datos curiosos -->
+    <section class="content-section">
+      <h3 class="section-title">¿Sabías que...?</h3>
+      <div class="fun-facts-grid">
+        <div class="fact-card">
+          <span class="fact-emoji">🏀</span>
+          <p>Cada vez que lanzas un balón de baloncesto hacia la canasta, estás aplicando los principios del tiro parabólico. Los jugadores profesionales ajustan intuitivamente el ángulo y la fuerza de su lanzamiento.</p>
+        </div>
+        <div class="fact-card">
+          <span class="fact-emoji">🌙</span>
+          <p>En la Luna, donde la gravedad es aproximadamente 1/6 de la terrestre, un proyectil lanzado con la misma velocidad y ángulo alcanzaría 6 veces más distancia y altura.</p>
+        </div>
+        <div class="fact-card">
+          <span class="fact-emoji">⚽</span>
+          <p>Los futbolistas profesionales como los cobradores de tiros libres usan efectos de spin que modifican la trayectoria parabólica "ideal", creando curvas impredecibles gracias a la resistencia del aire.</p>
+        </div>
+      </div>
+    </section>
+
   </main>
+
+  <!-- ============================================ -->
+  <!-- ===== SECCIÓN: SIMULADOR ===== -->
+  <!-- ============================================ -->
+  <main class="taller-content" *ngIf="activeSection === 'simulador'">
+
+    <section class="content-section">
+      <h3 class="section-title">Simulador Interactivo PhET</h3>
+      <p class="section-desc">
+        Experimenta con el simulador de la Universidad de Colorado.
+        Ajusta el ángulo, la velocidad y observa cómo cambia la trayectoria del proyectil en tiempo real.
+      </p>
+
+      <div class="simulator-wrapper">
+        <iframe
+          [src]="simulatorUrl"
+          allowfullscreen
+          class="simulator-iframe">
+        </iframe>
+      </div>
+
+      <div class="simulator-tips">
+        <h4 class="tips-title">💡 Consejos para usar el simulador</h4>
+        <div class="tips-grid">
+          <div class="tip-item">
+            <span class="tip-number">1</span>
+            <p>Usa el <strong>cañón</strong> para ajustar el ángulo de lanzamiento arrastrándolo hacia arriba o abajo.</p>
+          </div>
+          <div class="tip-item">
+            <span class="tip-number">2</span>
+            <p>Modifica la <strong>velocidad inicial</strong> con el control deslizante en el panel lateral.</p>
+          </div>
+          <div class="tip-item">
+            <span class="tip-number">3</span>
+            <p>Activa la <strong>resistencia del aire</strong> para ver cómo afecta la trayectoria real del proyectil.</p>
+          </div>
+          <div class="tip-item">
+            <span class="tip-number">4</span>
+            <p>Usa la <strong>cinta métrica</strong> para medir distancias y verifica tus cálculos teóricos.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="phet-credit">
+        <p>Simulador proporcionado por <strong>PhET Interactive Simulations</strong> — Universidad de Colorado, Boulder. Licencia Creative Commons.</p>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ============================================ -->
+  <!-- ===== SECCIÓN: ACTIVIDADES ===== -->
+  <!-- ============================================ -->
+  <main class="taller-content" *ngIf="activeSection === 'actividades'">
+
+    <section class="content-section">
+      <h3 class="section-title">Actividades Guiadas</h3>
+      <p class="section-desc">
+        Realiza cada actividad en orden usando el simulador PhET. Después de cada paso,
+        responde la pregunta en tu cuaderno o documento de clase.
+      </p>
+
+      <div class="activities-list">
+        <div class="activity-card" *ngFor="let act of activities">
+          <div class="activity-step-badge">Paso {{ act.step }}</div>
+          <div class="activity-body">
+            <div class="activity-instruction">
+              <span class="instruction-icon">🔬</span>
+              <p>{{ act.instruction }}</p>
+            </div>
+            <div class="activity-question">
+              <span class="question-icon">❓</span>
+              <p><strong>Pregunta:</strong> {{ act.question }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Reto final -->
+    <section class="content-section">
+      <div class="challenge-card">
+        <div class="challenge-header">
+          <span class="challenge-icon">🏆</span>
+          <h3>Reto Final</h3>
+        </div>
+        <p class="challenge-desc">
+          Usando el simulador en el modo "Laboratorio", intenta dar en el blanco (diana)
+          con un solo disparo. Debes calcular previamente el ángulo y la velocidad necesarios
+          usando las ecuaciones del movimiento parabólico. Anota tus cálculos y compáralos
+          con el resultado obtenido en el simulador.
+        </p>
+        <div class="challenge-hint">
+          <strong>Pista:</strong> Recuerda que para calcular el ángulo necesario dado un alcance R
+          y una velocidad V₀, puedes despejar θ de la fórmula del alcance máximo:
+          θ = ½ · arcsen(R · g / V₀²)
+        </div>
+      </div>
+    </section>
+
+  </main>
+
 </div>
