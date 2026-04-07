@@ -140,6 +140,17 @@
   background-clip: text;
 }
 
+.hero-project-title {
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.7;
+  max-width: 700px;
+  margin: 0 auto 16px;
+  font-style: italic;
+  opacity: 0.85;
+  text-align: center;
+}
+
 .hero-subtitle {
   font-size: 17px;
   color: var(--text-muted);
