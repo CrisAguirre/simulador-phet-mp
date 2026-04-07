@@ -42,6 +42,24 @@
   letter-spacing: -0.5px;
 }
 
+.logo-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.login-logo {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+  border-radius: 50%;
+  padding: 6px;
+  background: rgba(79, 195, 247, 0.08);
+  border: 2px solid rgba(79, 195, 247, 0.2);
+  box-shadow: 0 0 20px rgba(79, 195, 247, 0.15);
+  animation: fadeIn 0.8s ease;
+}
+
 .input-group {
   margin-bottom: 22px;
 }
