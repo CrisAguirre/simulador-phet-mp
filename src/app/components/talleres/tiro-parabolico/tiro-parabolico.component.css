@@ -128,6 +128,9 @@
   box-shadow: 0 4px 20px rgba(21, 101, 192, 0.4);
 }
 
+.tab-btn.eval-btn { color: #69f0ae; border-color: rgba(105, 240, 174, 0.3); }
+.tab-btn.eval-btn:hover { background: rgba(105, 240, 174, 0.1); transform: translateY(-2px); box-shadow: 0 4px 15px rgba(105, 240, 174, 0.2); }
+
 /* ===== CONTENT AREA ===== */
 .taller-content {
   max-width: 1000px;

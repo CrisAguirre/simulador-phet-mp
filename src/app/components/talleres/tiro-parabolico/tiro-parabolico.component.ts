@@ -124,6 +124,10 @@ export class TiroParabolicoComponent implements OnInit {
     this.router.navigate(['/dashboard']);
   }
 
+  goToEvaluacion(): void {
+    this.router.navigate(['/talleres/tiro-parabolico/evaluacion']);
+  }
+
   setSection(section: string): void {
     this.activeSection = section;
   }

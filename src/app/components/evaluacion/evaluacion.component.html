@@ -1,0 +1,110 @@
+<div class="taller-page eval-page">
+  <!-- NAVBAR -->
+  <nav class="taller-nav">
+    <button class="back-btn" (click)="goBack()">← Volver al Taller</button>
+    <h1 class="taller-nav-title">Evaluación: {{ getWorkshopName() }}</h1>
+    <span class="badge-eval">📝 Examen</span>
+  </nav>
+
+  <!-- WARNING MODAL (Anti-cheat) -->
+  <div class="warning-overlay" *ngIf="showWarning">
+    <div class="warning-modal">
+      <span class="warning-icon">⚠️</span>
+      <h3>¡Advertencia!</h3>
+      <p>{{ warningMessage }}</p>
+      <button class="btn-primary" (click)="closeWarning()">Entendido</button>
+    </div>
+  </div>
+
+  <main class="taller-content eval-content">
+
+    <!-- ===== ESTADO: INICIO ===== -->
+    <div class="eval-card eval-intro" *ngIf="!hasStarted && !isFinished">
+      <div class="icon-big">📝</div>
+      <h2>Evaluación de Conocimientos</h2>
+      <p class="subtitle">Taller de {{ getWorkshopName() }}</p>
+      
+      <div class="rules-box">
+        <h4>Reglas Importantes:</h4>
+        <ul>
+          <li>Son <strong>{{ questions.length }} preguntas</strong> ({{ questions.length/2 }} teoría, {{ questions.length/2 }} ejercicios).</li>
+          <li>Hay límite de tiempo: <strong>60s</strong> para teoría, <strong>90s</strong> para ejercicios.</li>
+          <li><strong>Mínimo para aprobar: 70%</strong> (14 respuestas correctas).</li>
+          <li>Queda estrictamente prohibido cambiar de pestaña. Al tercer intento tu examen será <strong>anulado (0 puntos)</strong>.</li>
+          <li>Toma lápiz, papel y calculadora para los ejercicios.</li>
+        </ul>
+      </div>
+
+      <button class="btn-primary start-btn" (click)="startEvaluation()">
+        Comenzar Evaluación
+      </button>
+    </div>
+
+    <!-- ===== ESTADO: EVALUACIÓN ACTIVA ===== -->
+    <div class="eval-active" *ngIf="hasStarted && !isFinished && questions.length > 0">
+      
+      <div class="eval-header">
+        <div class="progress-info">
+          <span>Pregunta {{ currentQuestionIndex + 1 }} de {{ questions.length }}</span>
+          <div class="progress-bar">
+            <div class="progress-fill" [style.width.%]="((currentQuestionIndex + 1) / questions.length) * 100"></div>
+          </div>
+        </div>
+        <div class="timer-box" [class.danger]="timeLeft <= 10">
+          <span class="timer-icon">⏱️</span>
+          <span>{{ formattedTime }}</span>
+        </div>
+      </div>
+
+      <div class="question-card">
+        <div class="question-type-badge" [class.type-math]="questions[currentQuestionIndex].type === 'ejercicio'">
+          {{ questions[currentQuestionIndex].type === 'ejercicio' ? '📐 Ejercicio Práctico' : '💡 Pregunta Teórica' }}
+        </div>
+        
+        <h3 class="question-text">{{ questions[currentQuestionIndex].text }}</h3>
+        
+        <div class="options-grid">
+          <button class="option-btn" 
+                  *ngFor="let opt of questions[currentQuestionIndex].options; let i = index"
+                  (click)="selectOption(i)">
+            <span class="option-letter">{{ ['A','B','C','D'][i] }}</span>
+            <span class="option-text">{{ opt }}</span>
+          </button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ===== ESTADO: RESULTADOS ===== -->
+    <div class="eval-card eval-results" *ngIf="isFinished">
+      <div class="result-icon">
+        <span *ngIf="passed">🏆</span>
+        <span *ngIf="!passed">📚</span>
+      </div>
+      <h2 [class.text-success]="passed" [class.text-danger]="!passed">
+        {{ passed ? '¡Felicitaciones, has aprobado!' : 'No has alcanzado el mínimo requerido' }}
+      </h2>
+      
+      <div class="score-display">
+        <div class="score-circle" [class.success]="passed" [class.danger]="!passed">
+          <span class="score-number">{{ score }}</span>
+          <span class="score-divisor">/ {{ questions.length || previousScore }}</span>
+        </div>
+      </div>
+
+      <p class="final-message" *ngIf="passed">Has demostrado un gran dominio de los temas de {{ getWorkshopName() }}. Esta nota ha sido registrada.</p>
+      <p class="final-message" *ngIf="!passed">
+        Repasa los conceptos en la pestaña de Teoría y vuelve a intentarlo cuando estés listo.
+      </p>
+      
+      <div class="student-info-box">
+        <p><strong>Estudiante:</strong> {{ studentEmail }}</p>
+        <p><strong>Estado:</strong> {{ passed ? 'Aprobado' : 'Reprobado o Anulado' }}</p>
+        <p *ngIf="warningMessage" class="text-danger"><strong>Motivo:</strong> {{ warningMessage }}</p>
+      </div>
+
+      <button class="btn-secondary mt-4" (click)="goBack()">Volver al Taller</button>
+    </div>
+
+  </main>
+</div>

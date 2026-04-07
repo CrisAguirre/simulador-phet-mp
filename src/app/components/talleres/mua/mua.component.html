@@ -1,17 +1,258 @@
 <div class="taller-page">
+
+  <!-- ===== NAVBAR ===== -->
   <nav class="taller-nav">
-    <button class="back-btn" (click)="goBack()">
-      ← Volver a Talleres
-    </button>
+    <button class="back-btn" (click)="goBack()">← Volver</button>
     <h1 class="taller-nav-title">Movimiento Uniforme Acelerado</h1>
+    <span class="badge-mua">🏎️ MUA</span>
   </nav>
 
-  <main class="taller-content">
-    <!-- Aquí va tu contenido teórico y ejercicios -->
-    <section class="taller-hero">
-      <div class="hero-icon">🚀</div>
-      <h2>Taller de MUA</h2>
-      <p class="hero-desc">Movimiento Uniforme Acelerado — Contenido en construcción</p>
+  <!-- ===== HERO ===== -->
+  <header class="taller-hero">
+    <div class="hero-icon-big">🏎️</div>
+    <h2 class="hero-main-title">Taller de MUA</h2>
+    <p class="hero-tagline">Descubre cómo los objetos cambian su velocidad de forma constante y aprende a predecir su posición en cualquier instante.</p>
+  </header>
+
+  <!-- ===== TABS ===== -->
+  <div class="section-tabs">
+    <button class="tab-btn" [class.active]="activeSection === 'teoria'" (click)="setSection('teoria')">📚 Teoría</button>
+    <button class="tab-btn" [class.active]="activeSection === 'simulador'" (click)="setSection('simulador')">🧪 Simulador</button>
+    <button class="tab-btn" [class.active]="activeSection === 'actividades'" (click)="setSection('actividades')">✏️ Actividades</button>
+    <button class="tab-btn eval-btn" (click)="goToEvaluacion()">📝 Evaluación</button>
+  </div>
+
+  <!-- ============================================ -->
+  <!-- ===== TEORÍA ===== -->
+  <!-- ============================================ -->
+  <main class="taller-content" *ngIf="activeSection === 'teoria'">
+
+    <section class="content-section">
+      <h3 class="section-title">¿Qué es el MUA?</h3>
+      <div class="intro-card">
+        <p>
+          El <strong>Movimiento Uniforme Acelerado (MUA)</strong> es aquel en el que un objeto
+          se desplaza en línea recta con una <strong>aceleración constante</strong>. Esto significa
+          que su velocidad cambia en cantidades iguales durante intervalos de tiempo iguales.
+        </p>
+        <p>
+          Imagina un auto que parte del reposo y cada segundo aumenta su velocidad en 3 m/s:
+          a los 0s tiene 0 m/s, a los 1s tiene 3 m/s, a los 2s tiene 6 m/s, a los 3s tiene 9 m/s...
+          Ese patrón uniforme de cambio es la esencia del MUA.
+        </p>
+        <p>
+          En la vida cotidiana lo observamos cuando un vehículo arranca en un semáforo,
+          cuando un avión acelera por la pista antes de despegar, o cuando una bicicleta
+          desciende por una pendiente suave y constante.
+        </p>
+      </div>
+    </section>
+
+    <section class="content-section">
+      <h3 class="section-title">Diferencia: MRU vs MUA</h3>
+      <div class="comparison-table">
+        <div class="comp-col mru">
+          <h4>MRU</h4>
+          <ul>
+            <li>Velocidad <strong>constante</strong></li>
+            <li>Aceleración = 0</li>
+            <li>Gráfica x(t): línea recta</li>
+            <li>Gráfica v(t): línea horizontal</li>
+          </ul>
+        </div>
+        <div class="comp-vs">VS</div>
+        <div class="comp-col mua">
+          <h4>MUA</h4>
+          <ul>
+            <li>Velocidad <strong>variable</strong></li>
+            <li>Aceleración ≠ 0 (constante)</li>
+            <li>Gráfica x(t): parábola</li>
+            <li>Gráfica v(t): línea inclinada</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="content-section">
+      <h3 class="section-title">Conceptos Fundamentales</h3>
+      <div class="concepts-grid">
+        <div class="concept-card" *ngFor="let concept of concepts">
+          <div class="concept-icon">{{ concept.icon }}</div>
+          <h4 class="concept-title">{{ concept.title }}</h4>
+          <p class="concept-desc">{{ concept.description }}</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="content-section">
+      <h3 class="section-title">Ecuaciones del MUA</h3>
+      <p class="section-desc">Haz clic en cada fórmula para ver su explicación.</p>
+      <div class="formulas-list">
+        <div class="formula-item" *ngFor="let f of formulas; let i = index"
+             [class.expanded]="expandedFormula === i"
+             (click)="toggleFormula(i)">
+          <div class="formula-header">
+            <span class="formula-label">{{ f.label }}</span>
+            <span class="formula-expression">{{ f.formula }}</span>
+            <span class="formula-toggle">{{ expandedFormula === i ? '−' : '+' }}</span>
+          </div>
+          <div class="formula-body" *ngIf="expandedFormula === i">
+            <p>{{ f.meaning }}</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="content-section">
+      <h3 class="section-title">¿Sabías que...?</h3>
+      <div class="fun-facts-grid">
+        <div class="fact-card">
+          <span class="fact-emoji">🚀</span>
+          <p>Un cohete espacial experimenta MUA durante el despegue: los motores proporcionan una fuerza constante que genera aceleración uniforme hasta que se agotan los propulsores.</p>
+        </div>
+        <div class="fact-card">
+          <span class="fact-emoji">🎢</span>
+          <p>En una montaña rusa, la bajada inicial es un ejemplo de MUA donde la gravedad acelera el carro de forma constante. ¡Por eso sientes esa emoción en el estómago!</p>
+        </div>
+        <div class="fact-card">
+          <span class="fact-emoji">🏃</span>
+          <p>Usain Bolt, el hombre más rápido del mundo, acelera durante los primeros 60 metros de los 100m planos. Después mantiene velocidad casi constante (MRU). ¡Su aceleración máxima fue de 9.5 m/s²!</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ============================================ -->
+  <!-- ===== SIMULADOR ===== -->
+  <!-- ============================================ -->
+  <main class="taller-content" *ngIf="activeSection === 'simulador'">
+
+    <section class="content-section">
+      <h3 class="section-title">Laboratorio Virtual — MUA</h3>
+      <p class="section-desc">
+        Ajusta la velocidad inicial y la aceleración, luego presiona "Iniciar" para ver cómo se mueve el auto.
+        Observa la gráfica de velocidad vs tiempo en tiempo real.
+      </p>
+
+      <!-- Controls -->
+      <div class="sim-controls">
+        <div class="control-group">
+          <label class="control-label">TIPO DE MOVIMIENTO</label>
+          <div style="display:flex; gap:10px; margin-bottom: 20px;">
+            <button class="tab-btn" [class.active]="simMode === 'aceleracion'" (click)="setMode('aceleracion')" [disabled]="isRunning" style="flex:1">
+              ▶ Aceleración
+            </button>
+            <button class="tab-btn" [class.active]="simMode === 'frenado'" (click)="setMode('frenado')" [disabled]="isRunning" style="flex:1; border-color: rgba(244, 67, 54, 0.3)">
+              🛑 Frenado
+            </button>
+          </div>
+        </div>
+
+        <div class="control-group">
+          <label class="control-label">Velocidad Inicial (V₀)</label>
+          <div class="slider-row">
+            <input type="range" [(ngModel)]="v0" [min]="simMode === 'frenado' ? 5 : 0" max="30" step="1" class="sim-slider"
+                   [disabled]="isRunning" (ngModelChange)="resetSimulation()">
+            <span class="slider-value">{{ v0 }} m/s</span>
+          </div>
+        </div>
+        <div class="control-group">
+          <label class="control-label">Aceleración (a)</label>
+          <div class="slider-row" *ngIf="simMode === 'aceleracion'">
+            <input type="range" [(ngModel)]="acceleration" min="0" max="10" step="1" class="sim-slider"
+                   [disabled]="isRunning" (ngModelChange)="resetSimulation()">
+            <span class="slider-value">{{ acceleration }} m/s²</span>
+          </div>
+          <div class="slider-row" *ngIf="simMode === 'frenado'">
+            <input type="range" [(ngModel)]="acceleration" min="-15" max="-1" step="1" class="sim-slider"
+                   [disabled]="isRunning" (ngModelChange)="resetSimulation()">
+            <span class="slider-value">{{ acceleration }} m/s²</span>
+          </div>
+        </div>
+        <div class="control-buttons">
+          <button class="ctrl-btn start" (click)="startSimulation()" *ngIf="!isRunning">▶ Iniciar</button>
+          <button class="ctrl-btn pause" (click)="pauseSimulation()" *ngIf="isRunning">⏸ Pausar</button>
+          <button class="ctrl-btn reset" (click)="resetSimulation()">🔄 Reiniciar</button>
+        </div>
+      </div>
+
+      <!-- Readouts -->
+      <div class="sim-readouts">
+        <div class="readout-item">
+          <span class="readout-label">Tiempo</span>
+          <span class="readout-value">{{ simTime.toFixed(1) }} s</span>
+        </div>
+        <div class="readout-item">
+          <span class="readout-label">Posición</span>
+          <span class="readout-value">{{ currentPosition.toFixed(1) }} m</span>
+        </div>
+        <div class="readout-item">
+          <span class="readout-label">Velocidad</span>
+          <span class="readout-value">{{ currentVelocity.toFixed(1) }} m/s</span>
+        </div>
+        <div class="readout-item">
+          <span class="readout-label">Aceleración</span>
+          <span class="readout-value accent">{{ acceleration }} m/s²</span>
+        </div>
+      </div>
+
+      <!-- Canvas -->
+      <div class="canvas-wrapper">
+        <canvas #simCanvas width="800" height="220" class="sim-canvas"></canvas>
+      </div>
+
+      <div class="canvas-wrapper graph-wrapper">
+        <canvas #graphCanvas width="800" height="250" class="sim-canvas"></canvas>
+      </div>
+
     </section>
   </main>
+
+  <!-- ============================================ -->
+  <!-- ===== ACTIVIDADES ===== -->
+  <!-- ============================================ -->
+  <main class="taller-content" *ngIf="activeSection === 'actividades'">
+
+    <section class="content-section">
+      <h3 class="section-title">Actividades Guiadas</h3>
+      <p class="section-desc">Realiza cada actividad con el simulador del taller. Anota tus respuestas en tu cuaderno.</p>
+
+      <div class="activities-list">
+        <div class="activity-card" *ngFor="let act of activities">
+          <div class="activity-step-badge">Paso {{ act.step }}</div>
+          <div class="activity-body">
+            <div class="activity-instruction">
+              <span class="instruction-icon">🔬</span>
+              <p>{{ act.instruction }}</p>
+            </div>
+            <div class="activity-question">
+              <span class="question-icon">❓</span>
+              <p><strong>Pregunta:</strong> {{ act.question }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="content-section">
+      <div class="challenge-card">
+        <div class="challenge-header">
+          <span class="challenge-icon">🏆</span>
+          <h3>Reto Final</h3>
+        </div>
+        <p class="challenge-desc">
+          Un auto parte del reposo y necesita recorrer 200 metros para alcanzar la velocidad
+          de despegue de 40 m/s. Usando la ecuación v² = v₀² + 2·a·Δx, calcula la aceleración
+          necesaria. Luego verifica tu resultado en el simulador configurando V₀ = 0 y la
+          aceleración que calculaste.
+        </p>
+        <div class="challenge-hint">
+          <strong>Pista:</strong> Despeja a = (v² − v₀²) / (2·Δx). Con v = 40 m/s, v₀ = 0, Δx = 200 m.
+        </div>
+      </div>
+    </section>
+
+  </main>
+
 </div>

@@ -10,6 +10,7 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { MuaComponent } from './components/talleres/mua/mua.component';
 import { CaidaLibreComponent } from './components/talleres/caida-libre/caida-libre.component';
 import { TiroParabolicoComponent } from './components/talleres/tiro-parabolico/tiro-parabolico.component';
+import { EvaluacionComponent } from './components/evaluacion/evaluacion.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { TiroParabolicoComponent } from './components/talleres/tiro-parabolico/t
     DashboardComponent,
     MuaComponent,
     CaidaLibreComponent,
-    TiroParabolicoComponent
+    TiroParabolicoComponent,
+    EvaluacionComponent
   ],
   imports: [
     BrowserModule,

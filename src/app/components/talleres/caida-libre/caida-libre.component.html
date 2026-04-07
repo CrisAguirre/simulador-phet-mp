@@ -1,17 +1,245 @@
 <div class="taller-page">
+
+  <!-- ===== NAVBAR ===== -->
   <nav class="taller-nav">
-    <button class="back-btn" (click)="goBack()">
-      ← Volver a Talleres
-    </button>
+    <button class="back-btn" (click)="goBack()">← Volver</button>
     <h1 class="taller-nav-title">Movimiento de Caída Libre</h1>
+    <span class="badge-cl">🍎 Gravedad</span>
   </nav>
 
-  <main class="taller-content">
-    <!-- Aquí va tu contenido teórico y ejercicios -->
-    <section class="taller-hero">
-      <div class="hero-icon">🍎</div>
-      <h2>Taller de Caída Libre</h2>
-      <p class="hero-desc">Movimiento de Caída Libre — Contenido en construcción</p>
+  <!-- ===== HERO ===== -->
+  <header class="taller-hero">
+    <div class="hero-icon-big">🍎</div>
+    <h2 class="hero-main-title">Taller de Caída Libre</h2>
+    <p class="hero-tagline">Explora cómo caen los objetos bajo la acción exclusiva de la gravedad y descubre la aceleración gravitacional.</p>
+  </header>
+
+  <!-- ===== TABS ===== -->
+  <div class="section-tabs">
+    <button class="tab-btn" [class.active]="activeSection === 'teoria'" (click)="setSection('teoria')">📚 Teoría</button>
+    <button class="tab-btn" [class.active]="activeSection === 'simulador'" (click)="setSection('simulador')">🧪 Simulador</button>
+    <button class="tab-btn" [class.active]="activeSection === 'actividades'" (click)="setSection('actividades')">✏️ Actividades</button>
+    <button class="tab-btn eval-btn" (click)="goToEvaluacion()">📝 Evaluación</button>
+  </div>
+
+  <!-- ============================================ -->
+  <!-- ===== TEORÍA ===== -->
+  <!-- ============================================ -->
+  <main class="taller-content" *ngIf="activeSection === 'teoria'">
+
+    <section class="content-section">
+      <h3 class="section-title">¿Qué es la Caída Libre?</h3>
+      <div class="intro-card">
+        <p>
+          La <strong>caída libre</strong> es el movimiento de un objeto que desciende únicamente
+          bajo la influencia de la <strong>fuerza de gravedad</strong>, sin que ninguna otra fuerza
+          (como la resistencia del aire) lo afecte significativamente.
+        </p>
+        <p>
+          Es un caso particular del Movimiento Uniforme Acelerado (MUA) donde la aceleración
+          es exactamente <strong>g ≈ 9.8 m/s²</strong> en la superficie terrestre, siempre apuntando
+          hacia abajo. Galileo Galilei demostró en el siglo XVI que todos los objetos caen con
+          la misma aceleración, independientemente de su masa.
+        </p>
+        <p>
+          En 1971, el astronauta David Scott dejó caer un martillo y una pluma simultáneamente
+          en la superficie de la Luna (donde no hay aire), confirmando la teoría de Galileo:
+          <strong>ambos llegaron al suelo al mismo tiempo</strong>.
+        </p>
+      </div>
+    </section>
+
+    <section class="content-section">
+      <h3 class="section-title">Conceptos Fundamentales</h3>
+      <div class="concepts-grid">
+        <div class="concept-card" *ngFor="let concept of concepts">
+          <div class="concept-icon">{{ concept.icon }}</div>
+          <h4 class="concept-title">{{ concept.title }}</h4>
+          <p class="concept-desc">{{ concept.description }}</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="content-section">
+      <h3 class="section-title">Gravedad en diferentes mundos</h3>
+      <div class="gravity-comparison">
+        <div class="gravity-card" *ngFor="let g of gravityOptions">
+          <span class="gravity-icon">{{ g.icon }}</span>
+          <h4>{{ g.label }}</h4>
+          <span class="gravity-value">g = {{ g.value }} m/s²</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="content-section">
+      <h3 class="section-title">Ecuaciones de Caída Libre</h3>
+      <p class="section-desc">Haz clic en cada fórmula para ver su explicación.</p>
+      <div class="formulas-list">
+        <div class="formula-item" *ngFor="let f of formulas; let i = index"
+             [class.expanded]="expandedFormula === i" (click)="toggleFormula(i)">
+          <div class="formula-header">
+            <span class="formula-label">{{ f.label }}</span>
+            <span class="formula-expression">{{ f.formula }}</span>
+            <span class="formula-toggle">{{ expandedFormula === i ? '−' : '+' }}</span>
+          </div>
+          <div class="formula-body" *ngIf="expandedFormula === i">
+            <p>{{ f.meaning }}</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="content-section">
+      <h3 class="section-title">¿Sabías que...?</h3>
+      <div class="fun-facts-grid">
+        <div class="fact-card">
+          <span class="fact-emoji">🪂</span>
+          <p>La velocidad terminal de un paracaidista en caída libre (sin paracaídas abierto) es de aproximadamente 200 km/h, limitada por la resistencia del aire.</p>
+        </div>
+        <div class="fact-card">
+          <span class="fact-emoji">🏗️</span>
+          <p>La Torre de la Caída Libre en parques de diversiones usa este principio: te elevan y te sueltan, experimentando brevemente la sensación de ingravidez.</p>
+        </div>
+        <div class="fact-card">
+          <span class="fact-emoji">🌌</span>
+          <p>En un agujero negro, la gravedad es tan intensa que ni siquiera la luz puede escapar de su caída libre. La aceleración gravitacional supera cualquier valor imaginable.</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ============================================ -->
+  <!-- ===== SIMULADOR ===== -->
+  <!-- ============================================ -->
+  <main class="taller-content" *ngIf="activeSection === 'simulador'">
+
+    <section class="content-section">
+      <h3 class="section-title">Laboratorio Virtual — Caída Libre</h3>
+      <p class="section-desc">
+        Selecciona la altura inicial y el planeta, luego suelta el objeto y observa cómo cae.
+        Compara la caída en diferentes mundos.
+      </p>
+
+      <div class="sim-controls">
+        <div class="control-group">
+          <label class="control-label">Modo de Simulación</label>
+          <div class="gravity-selector">
+            <button class="gravity-btn" [class.active]="simMode === 'caida'" (click)="setMode('caida')" [disabled]="isRunning">
+              <span>↓</span> Caída Libre
+            </button>
+            <button class="gravity-btn" [class.active]="simMode === 'lanzamiento'" (click)="setMode('lanzamiento')" [disabled]="isRunning">
+              <span>↑</span> Lanzamiento Vertical
+            </button>
+          </div>
+        </div>
+
+        <div class="control-group" *ngIf="simMode === 'lanzamiento'">
+          <label class="control-label">Velocidad Inicial ↑ (v₀)</label>
+          <div class="slider-row">
+            <input type="range" [(ngModel)]="initialVelocity" min="5" max="50" step="1" class="sim-slider"
+                   [disabled]="isRunning" (ngModelChange)="resetSimulation()">
+            <span class="slider-value">{{ initialVelocity }} m/s</span>
+          </div>
+        </div>
+
+        <div class="control-group">
+          <label class="control-label">Altura Inicial (h₀)</label>
+          <div class="slider-row">
+            <input type="range" [(ngModel)]="initialHeight" min="0" max="200" step="5" class="sim-slider"
+                   [disabled]="isRunning" (ngModelChange)="resetSimulation()">
+            <span class="slider-value">{{ initialHeight }} m</span>
+          </div>
+        </div>
+
+        <div class="control-group">
+          <label class="control-label">Gravedad (Planeta)</label>
+          <div class="gravity-selector">
+            <button *ngFor="let g of gravityOptions"
+                    class="gravity-btn" [class.active]="gravityPreset === g.key"
+                    [disabled]="isRunning" (click)="setGravity(g.key)">
+              <span>{{ g.icon }}</span> {{ g.label }}
+              <small>{{ g.value }} m/s²</small>
+            </button>
+          </div>
+        </div>
+
+        <div class="control-buttons">
+          <button class="ctrl-btn start" (click)="startSimulation()" *ngIf="!isRunning && !hasLanded">🔽 Soltar</button>
+          <button class="ctrl-btn reset" (click)="resetSimulation()">🔄 Reiniciar</button>
+        </div>
+      </div>
+
+      <div class="sim-readouts">
+        <div class="readout-item">
+          <span class="readout-label">Tiempo</span>
+          <span class="readout-value">{{ simTime.toFixed(2) }} s</span>
+        </div>
+        <div class="readout-item">
+          <span class="readout-label">Altura</span>
+          <span class="readout-value">{{ currentHeight.toFixed(1) }} m</span>
+        </div>
+        <div class="readout-item">
+          <span class="readout-label">Velocidad</span>
+          <span class="readout-value">{{ currentVelocity.toFixed(1) }} m/s</span>
+        </div>
+        <div class="readout-item">
+          <span class="readout-label">Gravedad</span>
+          <span class="readout-value accent">{{ gravity }} m/s²</span>
+        </div>
+      </div>
+
+      <div class="canvas-wrapper">
+        <canvas #simCanvas width="800" height="450" class="sim-canvas"></canvas>
+      </div>
+
     </section>
   </main>
+
+  <!-- ============================================ -->
+  <!-- ===== ACTIVIDADES ===== -->
+  <!-- ============================================ -->
+  <main class="taller-content" *ngIf="activeSection === 'actividades'">
+
+    <section class="content-section">
+      <h3 class="section-title">Actividades Guiadas</h3>
+      <p class="section-desc">Realiza cada actividad con el simulador. Anota tus respuestas y cálculos.</p>
+
+      <div class="activities-list">
+        <div class="activity-card" *ngFor="let act of activities">
+          <div class="activity-step-badge">Paso {{ act.step }}</div>
+          <div class="activity-body">
+            <div class="activity-instruction">
+              <span class="instruction-icon">🔬</span>
+              <p>{{ act.instruction }}</p>
+            </div>
+            <div class="activity-question">
+              <span class="question-icon">❓</span>
+              <p><strong>Pregunta:</strong> {{ act.question }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="content-section">
+      <div class="challenge-card">
+        <div class="challenge-header">
+          <span class="challenge-icon">🏆</span>
+          <h3>Reto Final</h3>
+        </div>
+        <p class="challenge-desc">
+          Un objeto se suelta desde lo alto de un edificio y tarda exactamente 4.0 segundos
+          en llegar al suelo (en la Tierra). Calcula: (a) la altura del edificio,
+          (b) la velocidad con la que impacta el suelo. Verifica en el simulador.
+        </p>
+        <div class="challenge-hint">
+          <strong>Pista:</strong> Usa h = ½·g·t² para la altura y v = g·t para la velocidad.
+          Con g = 9.8 m/s² y t = 4s.
+        </div>
+      </div>
+    </section>
+
+  </main>
+
 </div>

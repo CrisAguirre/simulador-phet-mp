@@ -7,6 +7,7 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { MuaComponent } from './components/talleres/mua/mua.component';
 import { CaidaLibreComponent } from './components/talleres/caida-libre/caida-libre.component';
 import { TiroParabolicoComponent } from './components/talleres/tiro-parabolico/tiro-parabolico.component';
+import { EvaluacionComponent } from './components/evaluacion/evaluacion.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -15,7 +16,8 @@ const routes: Routes = [
   { path: 'dashboard', component: DashboardComponent },
   { path: 'talleres/mua', component: MuaComponent },
   { path: 'talleres/caida-libre', component: CaidaLibreComponent },
-  { path: 'talleres/tiro-parabolico', component: TiroParabolicoComponent }
+  { path: 'talleres/tiro-parabolico', component: TiroParabolicoComponent },
+  { path: 'talleres/:taller/evaluacion', component: EvaluacionComponent }
 ];
 
 @NgModule({
