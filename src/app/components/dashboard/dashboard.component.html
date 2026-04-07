@@ -1,39 +1,109 @@
-<div class="dashboard-container">
-  <div class="neon-box lg">
-    <div class="header">
-      <h2 class="neon-title">Panel Principal</h2>
-      <button class="neon-btn danger" (click)="logout()">Cerrar Sesión</button>
+<!-- ===== NAVBAR ===== -->
+<nav class="navbar animate-slide-down">
+  <div class="nav-brand">
+    <span class="nav-logo">⚛️</span>
+    <span class="nav-title">FísicaLab</span>
+  </div>
+  <div class="nav-info">
+    <div class="nav-user">
+      <span class="user-icon">👤</span>
+      <span class="user-name">{{ currentUser?.name }}</span>
     </div>
-
-    <div class="info-card">
-      <h3>Bienvenido, <span class="highlight">{{ currentUser?.name }}</span></h3>
-      <p>Entraste a las: <span class="highlight-info">{{ currentUser?.entryTimestamp | date:'medium' }}</span></p>
-      <p>Tiempo de sesión activo: <span class="highlight-info">{{ activeTimeSeconds }} segundos</span></p>
+    <div class="nav-timer">
+      <span class="timer-icon">⏱️</span>
+      <span class="timer-value">{{ formattedTime }}</span>
     </div>
+    <button class="nav-btn logout" (click)="logout()">Salir</button>
+  </div>
+</nav>
 
-    <h3 class="neon-subtitle">Registro Histórico de Visitantes</h3>
-    <div class="table-container">
-      <table>
-        <thead>
-          <tr>
-            <th>Nombre</th>
-            <th>Correo</th>
-            <th>Fecha/Hora Entrada</th>
-            <th>Duración</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let log of logs">
-            <td>{{ log.name }}</td>
-            <td>{{ log.email }}</td>
-            <td>{{ log.entryTime }}</td>
-            <td>{{ log.durationSeconds }} segundos</td>
-          </tr>
-          <tr *ngIf="logs.length === 0">
-            <td colspan="4" class="no-data">Aún no hay registros guardados. ¡Sé el primero en salir!</td>
-          </tr>
-        </tbody>
-      </table>
+<!-- ===== HERO ===== -->
+<section class="hero">
+  <div class="hero-bg-particles"></div>
+  <div class="hero-content animate-fade-in-up">
+    <h1 class="hero-title">
+      Bienvenido a tus
+      <span class="hero-highlight">Talleres de Física</span>
+    </h1>
+    <p class="hero-subtitle">
+      Explora los conceptos fundamentales del movimiento a través de experiencias interactivas.
+      Selecciona un taller para comenzar tu aventura científica.
+    </p>
+    <div class="hero-stats">
+      <div class="stat-item">
+        <span class="stat-number">3</span>
+        <span class="stat-label">Talleres</span>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-item">
+        <span class="stat-number">1</span>
+        <span class="stat-label">Simulador</span>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-item">
+        <span class="stat-number">∞</span>
+        <span class="stat-label">Aprendizaje</span>
+      </div>
     </div>
   </div>
-</div>
+</section>
+
+<!-- ===== TALLERES CARDS ===== -->
+<section class="talleres-section">
+  <h2 class="section-heading">Elige tu Taller</h2>
+  <div class="talleres-grid">
+    <div
+      *ngFor="let taller of talleres; let i = index"
+      class="taller-card"
+      [class.central]="taller.isCentral"
+      [style.--accent]="taller.accentColor"
+      [style.--glow]="taller.accentGlow"
+      [style.animation-delay]="(i * 0.15) + 's'"
+      (click)="navigateToTaller(taller.route)"
+    >
+      <div class="card-glow-border"></div>
+      <div class="card-content">
+        <div class="card-icon">{{ taller.icon }}</div>
+        <span *ngIf="taller.isCentral" class="card-badge">⭐ Módulo Central</span>
+        <h3 class="card-title">{{ taller.title }}</h3>
+        <span class="card-subtitle">{{ taller.subtitle }}</span>
+        <p class="card-desc">{{ taller.description }}</p>
+        <button class="card-btn">
+          Iniciar Taller
+          <span class="btn-arrow">→</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== LOGS SECTION ===== -->
+<section class="logs-section">
+  <button class="logs-toggle" (click)="toggleLogs()">
+    <span>📊 Registro de Visitantes</span>
+    <span class="toggle-icon" [class.open]="showLogs">▼</span>
+  </button>
+  <div class="logs-body" *ngIf="showLogs">
+    <table class="logs-table">
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>Correo</th>
+          <th>Fecha/Hora Entrada</th>
+          <th>Duración</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let log of logs">
+          <td>{{ log.name }}</td>
+          <td>{{ log.email }}</td>
+          <td>{{ log.entryTime }}</td>
+          <td>{{ log.durationSeconds }}s</td>
+        </tr>
+        <tr *ngIf="logs.length === 0">
+          <td colspan="4" class="no-data">Aún no hay registros. ¡Tú eres el primero!</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
