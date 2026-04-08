@@ -1,5 +1,7 @@
 import { Component, OnInit, HostListener, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import html2canvas from 'html2canvas';
+import { jsPDF } from 'jspdf';
 
 interface Question {
   id: number;
@@ -172,6 +174,43 @@ export class EvaluacionComponent implements OnInit, OnDestroy {
     const m = Math.floor(this.timeLeft / 60);
     const s = this.timeLeft % 60;
     return `${m}:${s.toString().padStart(2, '0')}`;
+  }
+
+  downloadImage(): void {
+    const element = document.querySelector('.eval-results') as HTMLElement;
+    if (element) {
+      // Ocultar botones temporalmente para no incluirlos en la captura
+      const actionButtons = document.querySelector('.action-buttons') as HTMLElement;
+      if (actionButtons) actionButtons.style.display = 'none';
+
+      html2canvas(element, { backgroundColor: '#112240', scale: 2 }).then(canvas => {
+        if (actionButtons) actionButtons.style.display = 'flex';
+        const link = document.createElement('a');
+        link.download = `Resultado_${this.taller}_${this.studentEmail}.png`;
+        link.href = canvas.toDataURL();
+        link.click();
+      });
+    }
+  }
+
+  downloadPDF(): void {
+    const element = document.querySelector('.eval-results') as HTMLElement;
+    if (element) {
+      // Ocultar botones temporalmente para no incluirlos en la captura
+      const actionButtons = document.querySelector('.action-buttons') as HTMLElement;
+      if (actionButtons) actionButtons.style.display = 'none';
+
+      html2canvas(element, { backgroundColor: '#112240', scale: 2 }).then(canvas => {
+        if (actionButtons) actionButtons.style.display = 'flex';
+        const imgData = canvas.toDataURL('image/png');
+        const pdf = new jsPDF('p', 'mm', 'a4');
+        const pdfWidth = pdf.internal.pageSize.getWidth();
+        const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+        
+        pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+        pdf.save(`Resultado_${this.taller}_${this.studentEmail}.pdf`);
+      });
+    }
   }
 
   public getWorkshopName(): string {

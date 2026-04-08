@@ -29,8 +29,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
   talleres: Taller[] = [
     {
       id: 'mua',
-      title: 'Movimiento Uniforme Acelerado',
-      subtitle: 'MUA',
+      title: 'Movimiento Rectilíneo Uniformemente Variado',
+      subtitle: 'MRUV',
       description: 'Estudia cómo los objetos cambian su velocidad de forma constante. Aprende sobre aceleración, velocidad y desplazamiento.',
       icon: '🚀',
       route: '/talleres/mua',
@@ -40,7 +40,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     },
     {
       id: 'caida-libre',
-      title: 'Caída Libre',
+      title: 'Movimiento de Caída Libre',
       subtitle: 'Gravedad',
       description: 'Explora cómo caen los objetos bajo la acción exclusiva de la gravedad. Descubre la aceleración gravitacional y sus efectos.',
       icon: '🍎',
@@ -51,7 +51,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     },
     {
       id: 'tiro-parabolico',
-      title: 'Tiro Parabólico',
+      title: 'Movimiento de Tiro Parabólico',
       subtitle: 'Proyectil',
       description: 'El módulo central del curso. Analiza la trayectoria de un proyectil y experimenta con un simulador interactivo PhET.',
       icon: '🎯',
