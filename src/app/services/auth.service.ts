@@ -22,7 +22,25 @@ export class AuthService {
   private readonly LOGS_KEY = 'STUDENT_LOGS';
   private readonly ACTIVE_SESSION_KEY = 'ACTIVE_STUDENT_SESSION';
 
-  constructor() { }
+  constructor() {
+    this.ensureDefaultUser();
+  }
+
+  private ensureDefaultUser(): void {
+    const users = this.getDbData(this.USERS_KEY);
+    const defaultEmail = 'invitado@phet.com';
+    const defaultPassword = '123456';
+    
+    if (!users.find(u => u.email === defaultEmail)) {
+      users.push({
+        email: defaultEmail,
+        name: 'Usuario Invitado',
+        age: 18,
+        password: defaultPassword
+      });
+      this.setDbData(this.USERS_KEY, users);
+    }
+  }
 
   // Utils for Local Storage
   private getDbData(key: string): any[] {
@@ -60,6 +78,18 @@ export class AuthService {
     const users = this.getDbData(this.USERS_KEY);
     const normalizedEmail = email.trim().toLowerCase();
     const normalizedPassword = password.trim();
+
+    // Verificación "quemada" (hardcoded) para que el usuario por defecto siempre funcione
+    // incluso si hay algún problema con localStorage en el futuro despliegue (ej. Vercel).
+    if (normalizedEmail === 'invitado@phet.com' && normalizedPassword === '123456') {
+      const defaultUser = { email: 'invitado@phet.com', name: 'Usuario Invitado', age: 18, password: '123456' };
+      const sessionData = {
+        ...defaultUser,
+        entryTimestamp: new Date().getTime()
+      };
+      localStorage.setItem(this.ACTIVE_SESSION_KEY, JSON.stringify(sessionData));
+      return defaultUser;
+    }
 
     const user = users.find(u => 
       u.email.trim().toLowerCase() === normalizedEmail && 

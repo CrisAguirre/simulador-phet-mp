@@ -4,13 +4,13 @@
   <nav class="taller-nav">
     <button class="back-btn" (click)="goBack()">← Volver</button>
     <h1 class="taller-nav-title">Movimiento Uniforme Acelerado</h1>
-    <span class="badge-mua">🏎️ MUA</span>
+    <span class="badge-mua">🏎️ MRUV</span>
   </nav>
 
   <!-- ===== HERO ===== -->
   <header class="taller-hero">
     <div class="hero-icon-big">🏎️</div>
-    <h2 class="hero-main-title">Taller de MUA</h2>
+    <h2 class="hero-main-title">Taller de MRUV</h2>
     <p class="hero-tagline">Descubre cómo los objetos cambian su velocidad de forma constante y aprende a predecir su posición en cualquier instante.</p>
   </header>
 
@@ -27,18 +27,25 @@
   <!-- ============================================ -->
   <main class="taller-content" *ngIf="activeSection === 'teoria'">
 
+    <section class="content-section video-section">
+      <h3 class="section-title">Video Interactivo: Introducción al MRUV</h3>
+      <div class="video-container" style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 12px; margin-bottom: 2rem; box-shadow: 0 10px 20px rgba(0,0,0,0.3);">
+        <iframe src="https://www.youtube.com/embed/qktO5wkcnu4?autoplay=1&mute=1" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;" allowfullscreen></iframe>
+      </div>
+    </section>
+
     <section class="content-section">
-      <h3 class="section-title">¿Qué es el MUA?</h3>
+      <h3 class="section-title">¿Qué es el MRUV?</h3>
       <div class="intro-card">
         <p>
-          El <strong>Movimiento Uniforme Acelerado (MUA)</strong> es aquel en el que un objeto
+          El <strong>Movimiento Rectilíneo Uniformemente Variado (MRUV)</strong> es aquel en el que un objeto
           se desplaza en línea recta con una <strong>aceleración constante</strong>. Esto significa
           que su velocidad cambia en cantidades iguales durante intervalos de tiempo iguales.
         </p>
         <p>
           Imagina un auto que parte del reposo y cada segundo aumenta su velocidad en 3 m/s:
           a los 0s tiene 0 m/s, a los 1s tiene 3 m/s, a los 2s tiene 6 m/s, a los 3s tiene 9 m/s...
-          Ese patrón uniforme de cambio es la esencia del MUA.
+          Ese patrón uniforme de cambio es la esencia del MRUV.
         </p>
         <p>
           En la vida cotidiana lo observamos cuando un vehículo arranca en un semáforo,
@@ -49,7 +56,7 @@
     </section>
 
     <section class="content-section">
-      <h3 class="section-title">Diferencia: MRU vs MUA</h3>
+      <h3 class="section-title">Diferencia: MRU vs MRUV</h3>
       <div class="comparison-table">
         <div class="comp-col mru">
           <h4>MRU</h4>
@@ -62,7 +69,7 @@
         </div>
         <div class="comp-vs">VS</div>
         <div class="comp-col mua">
-          <h4>MUA</h4>
+          <h4>MRUV</h4>
           <ul>
             <li>Velocidad <strong>variable</strong></li>
             <li>Aceleración ≠ 0 (constante)</li>
@@ -85,7 +92,7 @@
     </section>
 
     <section class="content-section">
-      <h3 class="section-title">Ecuaciones del MUA</h3>
+      <h3 class="section-title">Ecuaciones del MRUV</h3>
       <p class="section-desc">Haz clic en cada fórmula para ver su explicación.</p>
       <div class="formulas-list">
         <div class="formula-item" *ngFor="let f of formulas; let i = index"
@@ -108,15 +115,27 @@
       <div class="fun-facts-grid">
         <div class="fact-card">
           <span class="fact-emoji">🚀</span>
-          <p>Un cohete espacial experimenta MUA durante el despegue: los motores proporcionan una fuerza constante que genera aceleración uniforme hasta que se agotan los propulsores.</p>
+          <p>Un cohete espacial experimenta MRUV durante el despegue: los motores proporcionan una fuerza constante que genera aceleración uniforme hasta que se agotan los propulsores.</p>
         </div>
         <div class="fact-card">
           <span class="fact-emoji">🎢</span>
-          <p>En una montaña rusa, la bajada inicial es un ejemplo de MUA donde la gravedad acelera el carro de forma constante. ¡Por eso sientes esa emoción en el estómago!</p>
+          <p>En una montaña rusa, la bajada inicial es un ejemplo de MRUV donde la gravedad acelera el carro de forma constante. ¡Por eso sientes esa emoción en el estómago!</p>
         </div>
         <div class="fact-card">
           <span class="fact-emoji">🏃</span>
           <p>Usain Bolt, el hombre más rápido del mundo, acelera durante los primeros 60 metros de los 100m planos. Después mantiene velocidad casi constante (MRU). ¡Su aceleración máxima fue de 9.5 m/s²!</p>
+        </div>
+        <div class="fact-card">
+          <span class="fact-emoji">🐆</span>
+          <p>El guepardo es el animal terrestre que posee la mayor aceleración del mundo. Puede pasar de 0 a 100 km/h en tan solo 3 segundos, lo que lo convierte en un experto nato del MRUV en la naturaleza.</p>
+        </div>
+        <div class="fact-card">
+          <span class="fact-emoji">🏎️</span>
+          <p>Los autos de Fórmula 1 están diseñados aerodinámicamente no solo para alcanzar altas velocidades, sino para tener unas tasas de aceleración (positiva y negativa) brutales, pudiendo frenar de 300 a 0 km/h en apenas 4 segundos.</p>
+        </div>
+        <div class="fact-card">
+          <span class="fact-emoji">🏢</span>
+          <p>Los ascensores de los rascacielos más altos utilizan perfiles de aceleración cuidadosamente calculados. Experimentan MRUV gradual para no causar malestar en el oído medio de los pasajeros mientras alcanzan la velocidad tope.</p>
         </div>
       </div>
     </section>
@@ -129,7 +148,7 @@
   <main class="taller-content" *ngIf="activeSection === 'simulador'">
 
     <section class="content-section">
-      <h3 class="section-title">Laboratorio Virtual — MUA</h3>
+      <h3 class="section-title">Laboratorio Virtual — MRUV</h3>
       <p class="section-desc">
         Ajusta la velocidad inicial y la aceleración, luego presiona "Iniciar" para ver cómo se mueve el auto.
         Observa la gráfica de velocidad vs tiempo en tiempo real.

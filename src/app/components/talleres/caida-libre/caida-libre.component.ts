@@ -52,7 +52,7 @@ export class CaidaLibreComponent implements OnDestroy, AfterViewInit {
     {
       icon: '📉',
       title: 'Aceleración gravitacional',
-      description: 'En la Tierra, g ≈ 9.8 m/s². Esto significa que cada segundo que pasa, la velocidad del objeto aumenta en 9.8 m/s. Es un caso especial del MUA.'
+      description: 'En la Tierra, g ≈ 9.8 m/s². Esto significa que cada segundo que pasa, la velocidad del objeto aumenta en 9.8 m/s. Es un caso especial del MRUV.'
     },
     {
       icon: '⏱️',

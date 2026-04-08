@@ -48,12 +48,12 @@ export class MuaComponent implements OnInit, OnDestroy, AfterViewInit {
     {
       icon: '🏎️',
       title: 'Aceleración constante',
-      description: 'En el MUA, la aceleración permanece igual durante todo el movimiento. El objeto cambia su velocidad de forma uniforme: cada segundo gana (o pierde) la misma cantidad de velocidad.'
+      description: 'En el MRUV, la aceleración permanece igual durante todo el movimiento. El objeto cambia su velocidad de forma uniforme: cada segundo gana (o pierde) la misma cantidad de velocidad.'
     },
     {
       icon: '📈',
       title: 'Velocidad variable',
-      description: 'A diferencia del MRU (donde la velocidad es constante), en el MUA la velocidad cambia linealmente con el tiempo. La gráfica v(t) es una línea recta con pendiente igual a la aceleración.'
+      description: 'A diferencia del MRU (donde la velocidad es constante), en el MRUV la velocidad cambia linealmente con el tiempo. La gráfica v(t) es una línea recta con pendiente igual a la aceleración.'
     },
     {
       icon: '📏',
@@ -63,7 +63,7 @@ export class MuaComponent implements OnInit, OnDestroy, AfterViewInit {
     {
       icon: '🔄',
       title: 'Desaceleración',
-      description: 'Cuando un objeto frena, también es MUA pero con aceleración negativa. Un auto que reduce su velocidad de 60 a 0 km/h experimenta desaceleración uniforme.'
+      description: 'Cuando un objeto frena, también es MRUV pero con aceleración negativa. Un auto que reduce su velocidad de 60 a 0 km/h experimenta desaceleración uniforme.'
     }
   ];
 
