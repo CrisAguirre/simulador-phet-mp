@@ -82,7 +82,6 @@
 /* ===== ANIMATIONS ===== */
 @keyframes scaleIn { 0% { transform: scale(0.8); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
 
-/* ===== RESPONSIVE ===== */
 @media (max-width: 768px) {
   .eval-card { padding: 32px 20px; }
   .eval-card h2 { font-size: 24px; }
@@ -92,4 +91,91 @@
   .progress-info { width: 100%; margin-right: 0; }
   .timer-box { width: 100%; justify-content: center; }
   .taller-nav-title { font-size: 15px; }
+}
+
+/* ===== CERTIFICATE EXPORT MODE ===== */
+.certificate-export {
+  background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%) !important;
+  color: #2c3e50 !important;
+  border: 8px double #1565c0 !important;
+  border-radius: 4px !important;
+  box-shadow: none !important;
+  padding: 60px 40px !important;
+  margin: 0 !important;
+}
+.certificate-export::before { display: none !important; }
+
+.certificate-export h2 {
+  color: #1565c0 !important;
+  text-shadow: none !important;
+  font-size: 36px !important;
+  font-weight: 900 !important;
+  margin-bottom: 24px !important;
+  text-transform: uppercase;
+}
+
+.certificate-export .text-danger { color: #c62828 !important; }
+.certificate-export .text-success { color: #2e7d32 !important; }
+
+.certificate-export .result-icon {
+  font-size: 100px !important;
+  margin-bottom: 20px !important;
+  filter: drop-shadow(0 10px 10px rgba(0,0,0,0.1)) !important;
+}
+
+.certificate-export .score-display { margin: 40px 0 !important; }
+
+.certificate-export .score-circle {
+  background: #ffffff !important;
+  border-color: #1565c0 !important;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.08) !important;
+  width: 160px !important;
+  height: 160px !important;
+}
+
+.certificate-export .score-circle.success { border-color: #2e7d32 !important; }
+.certificate-export .score-circle.danger { border-color: #c62828 !important; }
+
+.certificate-export .score-number {
+  color: #1565c0 !important;
+  font-size: 56px !important;
+}
+.certificate-export .score-circle.success .score-number { color: #2e7d32 !important; }
+.certificate-export .score-circle.danger .score-number { color: #c62828 !important; }
+
+.certificate-export .score-divisor {
+  color: #7f8c8d !important;
+  font-size: 18px !important;
+}
+
+.certificate-export .final-message {
+  color: #34495e !important;
+  font-weight: 600 !important;
+  font-size: 20px !important;
+  line-height: 1.5 !important;
+  max-width: 600px !important;
+  margin: 0 auto 40px !important;
+}
+
+.certificate-export .student-info-box {
+  background: #ffffff !important;
+  border: 1px solid #bdc3c7 !important;
+  border-left: 6px solid #1565c0 !important;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.05) !important;
+  padding: 24px 30px !important;
+  border-radius: 8px !important;
+  min-width: 350px !important;
+  text-align: left !important;
+  display: inline-block !important;
+}
+
+.certificate-export .student-info-box p {
+  color: #34495e !important;
+  font-size: 18px !important;
+  margin: 12px 0 !important;
+}
+.certificate-export .student-info-box strong {
+  color: #1565c0 !important;
+  display: inline-block !important;
+  width: 120px !important;
 }

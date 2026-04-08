@@ -183,13 +183,20 @@ export class EvaluacionComponent implements OnInit, OnDestroy {
       const actionButtons = document.querySelector('.action-buttons') as HTMLElement;
       if (actionButtons) actionButtons.style.display = 'none';
 
-      html2canvas(element, { backgroundColor: '#112240', scale: 2 }).then(canvas => {
-        if (actionButtons) actionButtons.style.display = 'flex';
-        const link = document.createElement('a');
-        link.download = `Resultado_${this.taller}_${this.studentEmail}.png`;
-        link.href = canvas.toDataURL();
-        link.click();
-      });
+      // Añadir clase temporal para diseño de certificado claro y bonito
+      element.classList.add('certificate-export');
+
+      // Pequeño delay para asegurar que el DOM aplicó la clase antes de capturar
+      setTimeout(() => {
+        html2canvas(element, { backgroundColor: '#ffffff', scale: 2, logging: false }).then(canvas => {
+          element.classList.remove('certificate-export');
+          if (actionButtons) actionButtons.style.display = 'flex';
+          const link = document.createElement('a');
+          link.download = `Certificado_${this.getWorkshopName()}_${this.studentEmail}.png`;
+          link.href = canvas.toDataURL();
+          link.click();
+        });
+      }, 100);
     }
   }
 
@@ -200,16 +207,24 @@ export class EvaluacionComponent implements OnInit, OnDestroy {
       const actionButtons = document.querySelector('.action-buttons') as HTMLElement;
       if (actionButtons) actionButtons.style.display = 'none';
 
-      html2canvas(element, { backgroundColor: '#112240', scale: 2 }).then(canvas => {
-        if (actionButtons) actionButtons.style.display = 'flex';
-        const imgData = canvas.toDataURL('image/png');
-        const pdf = new jsPDF('p', 'mm', 'a4');
-        const pdfWidth = pdf.internal.pageSize.getWidth();
-        const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
-        
-        pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-        pdf.save(`Resultado_${this.taller}_${this.studentEmail}.pdf`);
-      });
+      // Añadir clase temporal para diseño de certificado
+      element.classList.add('certificate-export');
+
+      setTimeout(() => {
+        html2canvas(element, { backgroundColor: '#ffffff', scale: 2, logging: false }).then(canvas => {
+          element.classList.remove('certificate-export');
+          if (actionButtons) actionButtons.style.display = 'flex';
+          
+          const imgData = canvas.toDataURL('image/png');
+          const pdf = new jsPDF('p', 'mm', 'a4');
+          const pdfWidth = pdf.internal.pageSize.getWidth();
+          // Calculamos la altura proporcional para evitar estiramientos
+          const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+          
+          pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+          pdf.save(`Certificado_${this.getWorkshopName()}_${this.studentEmail}.pdf`);
+        });
+      }, 100);
     }
   }
 
