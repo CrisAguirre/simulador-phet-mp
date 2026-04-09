@@ -52,7 +52,13 @@ export class EvaluacionComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.taller = this.route.snapshot.paramMap.get('taller') || '';
-    this.studentEmail = localStorage.getItem('userEmail') || 'estudiante@correo.com';
+    const userString = localStorage.getItem('PHET_USER');
+    if (userString) {
+      const user = JSON.parse(userString);
+      this.studentEmail = user.email;
+    } else {
+      this.studentEmail = 'estudiante@correo.com';
+    }
     
     // Check if already taken
     const existingResult = localStorage.getItem(`eval_${this.taller}_${this.studentEmail}`);

@@ -44,6 +44,8 @@ export class AuthService {
     }
     
     return this.http.post(`${this.apiUrl}/auth/register`, {
+      name: userData.name,
+      age: userData.age,
       email: userData.email,
       password: userData.password
     }).pipe(
