@@ -103,75 +103,87 @@
     <div class="admin-content-box">
       <!-- PESTAÑA VISITANTES -->
       <div *ngIf="activeAdminTab === 'visitantes'" class="logs-body open">
-        <table class="logs-table">
-          <thead>
-            <tr>
-              <th>Correo</th>
-              <th>Fecha/Hora Entrada</th>
-              <th>Dispositivo Info</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let log of logs">
-              <td>{{ log.email }}</td>
-              <td>{{ log.loginTime | date:'medium' }}</td>
-              <td><span style="font-size: 0.8em; opacity: 0.7">{{ log.deviceInfo || 'Dato no disponible' }}</span></td>
-            </tr>
-            <tr *ngIf="logs.length === 0">
-              <td colspan="3" class="no-data">Aún no hay registros de acceso.</td>
-            </tr>
-          </tbody>
-        </table>
+        <div class="table-responsive">
+          <table class="logs-table">
+            <thead>
+              <tr>
+                <th>Nombre</th>
+                <th>Correo</th>
+                <th>Fecha/Hora Entrada</th>
+                <th>Dispositivo Info</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let log of logs">
+                <td>{{ log.userId?.name || 'No especificado' }}</td>
+                <td>{{ log.email }}</td>
+                <td>{{ log.loginTime | date:'medium' }}</td>
+                <td><span style="font-size: 0.8em; opacity: 0.7">{{ log.deviceInfo || 'Dato no disponible' }}</span></td>
+              </tr>
+              <tr *ngIf="logs.length === 0">
+                <td colspan="4" class="no-data">Aún no hay registros de acceso.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
 
       <!-- PESTAÑA ESTUDIANTES -->
       <div *ngIf="activeAdminTab === 'estudiantes'" class="logs-body open">
-        <table class="logs-table">
-          <thead>
-            <tr>
-              <th>ID Sistema</th>
-              <th>Correo Estudiante</th>
-              <th>Fecha Registro</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let user of usuarios">
-              <td style="font-family: monospace">{{ user._id }}</td>
-              <td>{{ user.email }}</td>
-              <td>{{ user.createdAt | date:'mediumDate' }}</td>
-            </tr>
-            <tr *ngIf="usuarios.length === 0">
-              <td colspan="3" class="no-data">No se han inscrito estudiantes aún.</td>
-            </tr>
-          </tbody>
-        </table>
+        <div class="table-responsive">
+          <table class="logs-table">
+            <thead>
+              <tr>
+                <th>Nombre</th>
+                <th>Correo Estudiante</th>
+                <th>Edad</th>
+                <th>Fecha Registro</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let user of usuarios">
+                <td>{{ user.name || 'No especificado' }}</td>
+                <td>{{ user.email }}</td>
+                <td>{{ user.age || 'N/A' }}</td>
+                <td>{{ user.createdAt | date:'mediumDate' }}</td>
+              </tr>
+              <tr *ngIf="usuarios.length === 0">
+                <td colspan="4" class="no-data">No se han inscrito estudiantes aún.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
 
       <!-- PESTAÑA EVALUACIONES -->
       <div *ngIf="activeAdminTab === 'evaluaciones'" class="logs-body open">
-        <table class="logs-table">
-          <thead>
-            <tr>
-              <th>Estudiante (Correo)</th>
-              <th>Taller Completado</th>
-              <th>Puntuación</th>
-              <th>Respuestas Totales</th>
-              <th>Fecha Envío</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let ev of evaluaciones">
-              <td>{{ ev.email }}</td>
-              <td><span class="badge">{{ ev.taller }}</span></td>
-              <td [ngStyle]="{'color': ev.score >= 60 ? '#4caf50' : '#f44336', 'font-weight': 'bold'}">{{ ev.score }}%</td>
-              <td>{{ ev.totalQuestions }} preguntas</td>
-              <td>{{ ev.createdAt | date:'short' }}</td>
-            </tr>
-            <tr *ngIf="evaluaciones.length === 0">
-              <td colspan="5" class="no-data">Ningún estudiante ha tomado una evaluación todavía.</td>
-            </tr>
-          </tbody>
-        </table>
+        <div class="table-responsive">
+          <table class="logs-table">
+            <thead>
+              <tr>
+                <th>Nombre</th>
+                <th>Estudiante (Correo)</th>
+                <th>Taller Completado</th>
+                <th>Puntuación</th>
+                <th>Respuestas Totales</th>
+                <th>Fecha Envío</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let ev of evaluaciones">
+                <td>{{ ev.userId?.name || 'No especificado' }}</td>
+                <td>{{ ev.email }}</td>
+                <td><span class="badge">{{ ev.taller }}</span></td>
+                <td [ngStyle]="{'color': ev.score >= 60 ? '#4caf50' : '#f44336', 'font-weight': 'bold'}">{{ ev.score }}%</td>
+                <td>{{ ev.totalQuestions }} preguntas</td>
+                <td>{{ ev.createdAt | date:'short' }}</td>
+              </tr>
+              <tr *ngIf="evaluaciones.length === 0">
+                <td colspan="6" class="no-data">Ningún estudiante ha tomado una evaluación todavía.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   </div>

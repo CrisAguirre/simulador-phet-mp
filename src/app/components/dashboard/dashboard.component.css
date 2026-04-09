@@ -416,6 +416,13 @@
 .logs-table {
   width: 100%;
   border-collapse: collapse;
+  min-width: 600px;
+}
+
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .logs-table th,
