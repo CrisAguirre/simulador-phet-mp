@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import html2canvas from 'html2canvas';
 import { jsPDF } from 'jspdf';
+import { environment } from '../../../environments/environment';
 
 interface Question {
   id: number;
@@ -171,7 +172,7 @@ export class EvaluacionComponent implements OnInit, OnDestroy {
     if (userString) {
       const user = JSON.parse(userString);
       if (user.role !== 'admin') {
-        this.http.post('http://localhost:3000/evaluaciones', {
+        this.http.post(`${environment.apiUrl}/evaluaciones`, {
           userId: user.id || user._id,
           email: user.email,
           taller: this.getWorkshopName(),
