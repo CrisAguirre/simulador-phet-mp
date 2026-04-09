@@ -3,10 +3,10 @@
     <div class="logo-container">
       <img src="assets/logo.png" alt="Logo Institucional" class="login-logo">
     </div>
-    <h2 class="neon-title">Acceso Estudiantes</h2>
-    
+    <h2 class="neon-title">Simulador Phet</h2>
+
     <div *ngIf="errorMessage" class="error-msg">{{ errorMessage }}</div>
-    
+
     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
       <div class="input-group">
         <label>Correo Electrónico</label>
@@ -14,19 +14,14 @@
       </div>
 
       <div class="input-group">
-        <label>Contraseña Generada</label>
+        <label>Contraseña</label>
         <input type="password" formControlName="password" placeholder="Tu contraseña">
       </div>
 
-      <div class="default-user-info" style="margin-bottom: 15px; font-size: 0.85em; color: rgba(255, 255, 255, 0.7); text-align: center; background: rgba(0,0,0,0.2); padding: 10px; border-radius: 8px;">
-        <p style="margin: 0 0 5px 0;">¿Sin cuenta? Ingresa con:</p>
-        <p style="margin: 0; color: #4facfe;"><strong>invitado@phet.com</strong> / <strong>Ph3t@2026</strong></p>
-      </div>
-
       <button type="submit" class="neon-btn" [disabled]="loginForm.invalid">Ingresar</button>
-      
+
       <div class="links">
-        <a (click)="goToRegister()">No tengo cuenta, registrarme</a>
+        <a (click)="goToRegister()">Registrarme</a>
       </div>
     </form>
   </div>
