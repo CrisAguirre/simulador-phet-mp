@@ -25,7 +25,7 @@ export class EvaluacionComponent implements OnInit, OnDestroy {
   score: number = 0;
   hasStarted: boolean = false;
   isFinished: boolean = false;
-  
+
   // Timer
   timeLeft: number = 0;
   timerInterval: any;
@@ -38,35 +38,38 @@ export class EvaluacionComponent implements OnInit, OnDestroy {
   studentEmail: string = '';
   passed: boolean = false;
   previousScore: number | null = null;
-  attempts: number = 0;
-  
+
   // Modals/Warnings
   showWarning: boolean = false;
   warningMessage: string = '';
 
   constructor(
-    private route: ActivatedRoute, 
+    private route: ActivatedRoute,
     private router: Router,
     private http: HttpClient
   ) { }
 
   ngOnInit(): void {
     this.taller = this.route.snapshot.paramMap.get('taller') || '';
+
+    // CORRECCIÓN: leer email desde PHET_USER (objeto JSON guardado en login)
     const userString = localStorage.getItem('PHET_USER');
     if (userString) {
       const user = JSON.parse(userString);
-      this.studentEmail = user.email;
-    } else {
-      this.studentEmail = 'estudiante@correo.com';
+      this.studentEmail = user.email || 'estudiante@correo.com';
     }
-    
-    // Check if already taken
-    const existingResult = localStorage.getItem(`eval_${this.taller}_${this.studentEmail}`);
-    if (existingResult) {
-      const data = JSON.parse(existingResult);
-      this.previousScore = data.score;
-      this.passed = data.passed;
-      this.attempts = data.attempts || 1;
+
+    // Verificar intentos previos (máximo 2 por taller)
+    const attemptsKey = `eval_attempts_${this.taller}_${this.studentEmail}`;
+    const attempts = parseInt(localStorage.getItem(attemptsKey) || '0', 10);
+
+    if (attempts >= 2) {
+      const existingResult = localStorage.getItem(`eval_${this.taller}_${this.studentEmail}`);
+      if (existingResult) {
+        const parsed = JSON.parse(existingResult);
+        this.previousScore = parsed.score;
+        this.passed = parsed.passed;
+      }
       this.isFinished = true;
     }
 
@@ -100,7 +103,7 @@ export class EvaluacionComponent implements OnInit, OnDestroy {
     } else {
       this.router.navigate(['/dashboard']);
     }
-    
+
     // Shuffle questions
     this.questions.sort(() => Math.random() - 0.5);
   }
@@ -118,7 +121,7 @@ export class EvaluacionComponent implements OnInit, OnDestroy {
     this.clearTimer();
     const currentQ = this.questions[this.currentQuestionIndex];
     this.timeLeft = currentQ.type === 'teoria' ? 60 : 150;
-    
+
     this.timerInterval = setInterval(() => {
       this.timeLeft--;
       if (this.timeLeft <= 0) {
@@ -139,7 +142,7 @@ export class EvaluacionComponent implements OnInit, OnDestroy {
     if (optionIndex !== null && optionIndex === this.questions[this.currentQuestionIndex].correctAnswer) {
       this.score++;
     }
-    
+
     setTimeout(() => {
       this.nextQuestion(optionIndex);
     }, 500); // Pequeño retraso para ver la selección (opcional)
@@ -157,40 +160,50 @@ export class EvaluacionComponent implements OnInit, OnDestroy {
   finishEvaluation(forced: boolean = false): void {
     this.clearTimer();
     this.isFinished = true;
-    
+
     if (forced) {
-      this.score = 0; // Penalización por trampa
+      this.score = 0;
       this.warningMessage = "Evaluación anulada por exceso de cambios de pestaña.";
     }
 
-    const percentage = (this.score / this.questions.length) * 100;
+    const percentage = Math.round((this.score / this.questions.length) * 100);
     this.passed = percentage >= 70;
-    this.attempts++;
 
-    // Save to localStorage for instant local access
+    // Guardar resultado en localStorage
     const result = {
-      score: this.score,
+      score: percentage,
       total: this.questions.length,
       passed: this.passed,
-      attempts: this.attempts,
       date: new Date().toISOString()
     };
     localStorage.setItem(`eval_${this.taller}_${this.studentEmail}`, JSON.stringify(result));
-    this.previousScore = this.score;
 
-    // Save to MongoDB Backend
+    // Incrementar contador de intentos
+    const attemptsKey = `eval_attempts_${this.taller}_${this.studentEmail}`;
+    const attempts = parseInt(localStorage.getItem(attemptsKey) || '0', 10);
+    localStorage.setItem(attemptsKey, (attempts + 1).toString());
+
+    this.previousScore = percentage;
+
+    // Guardar en MongoDB
     const userString = localStorage.getItem('PHET_USER');
     if (userString) {
       const user = JSON.parse(userString);
       if (user.role !== 'admin') {
         this.http.post(`${environment.apiUrl}/evaluaciones`, {
-          userId: user.id || user._id,
+          userId: user._id || user.id,
           email: user.email,
           taller: this.getWorkshopName(),
-          score: this.score,
+          score: percentage,
           totalQuestions: this.questions.length,
-          results: { passed: this.passed, percentage }
+          results: {
+            passed: this.passed,
+            percentage,
+            correctAnswers: this.score,
+            attempt: attempts + 1
+          }
         }).subscribe({
+          next: () => console.log('Evaluación guardada en BD'),
           error: (err) => console.error('Error guardando evaluación en BD:', err)
         });
       }
@@ -199,19 +212,6 @@ export class EvaluacionComponent implements OnInit, OnDestroy {
 
   closeWarning(): void {
     this.showWarning = false;
-  }
-
-  retryEvaluation(): void {
-    this.hasStarted = false;
-    this.isFinished = false;
-    this.score = 0;
-    this.currentQuestionIndex = 0;
-    this.tabSwitches = 0;
-    this.showWarning = false;
-    this.warningMessage = '';
-    
-    // Volver a mezclar preguntas para el nuevo intento
-    this.questions.sort(() => Math.random() - 0.5);
   }
 
   goBack(): void {
@@ -262,13 +262,13 @@ export class EvaluacionComponent implements OnInit, OnDestroy {
         html2canvas(element, { backgroundColor: '#ffffff', scale: 2, logging: false }).then(canvas => {
           element.classList.remove('certificate-export');
           if (actionButtons) actionButtons.style.display = 'flex';
-          
+
           const imgData = canvas.toDataURL('image/png');
           const pdf = new jsPDF('p', 'mm', 'a4');
           const pdfWidth = pdf.internal.pageSize.getWidth();
           // Calculamos la altura proporcional para evitar estiramientos
           const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
-          
+
           pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
           pdf.save(`Certificado_${this.getWorkshopName()}_${this.studentEmail}.pdf`);
         });
