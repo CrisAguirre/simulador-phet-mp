@@ -5,6 +5,7 @@ export interface User {
   name: string;
   age: number;
   password?: string;
+  role?: string;
 }
 
 export interface SessionLog {
@@ -36,7 +37,21 @@ export class AuthService {
         email: defaultEmail,
         name: 'Usuario Invitado',
         age: 18,
-        password: defaultPassword
+        password: defaultPassword,
+        role: 'student'
+      });
+      this.setDbData(this.USERS_KEY, users);
+    }
+    
+    const adminEmail = 'admin@admin.com';
+    const adminPassword = 'admin';
+    if (!users.find(u => u.email === adminEmail)) {
+      users.push({
+        email: adminEmail,
+        name: 'Administrador',
+        age: 30,
+        password: adminPassword,
+        role: 'admin'
       });
       this.setDbData(this.USERS_KEY, users);
     }
@@ -82,13 +97,23 @@ export class AuthService {
     // Verificación "quemada" (hardcoded) para que el usuario por defecto siempre funcione
     // incluso si hay algún problema con localStorage en el futuro despliegue (ej. Vercel).
     if (normalizedEmail === 'invitado@phet.com' && normalizedPassword === '123456') {
-      const defaultUser = { email: 'invitado@phet.com', name: 'Usuario Invitado', age: 18, password: '123456' };
+      const defaultUser = { email: 'invitado@phet.com', name: 'Usuario Invitado', age: 18, password: '123456', role: 'student' };
       const sessionData = {
         ...defaultUser,
         entryTimestamp: new Date().getTime()
       };
       localStorage.setItem(this.ACTIVE_SESSION_KEY, JSON.stringify(sessionData));
       return defaultUser;
+    }
+
+    if (normalizedEmail === 'admin@admin.com' && normalizedPassword === 'admin') {
+      const adminUser = { email: 'admin@admin.com', name: 'Administrador', age: 30, password: 'admin', role: 'admin' };
+      const sessionData = {
+        ...adminUser,
+        entryTimestamp: new Date().getTime()
+      };
+      localStorage.setItem(this.ACTIVE_SESSION_KEY, JSON.stringify(sessionData));
+      return adminUser;
     }
 
     const user = users.find(u => 

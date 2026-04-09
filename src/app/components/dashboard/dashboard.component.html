@@ -17,8 +17,10 @@
   </div>
 </nav>
 
-<!-- ===== HERO ===== -->
-<section class="hero">
+<!-- ===== STUDENT DASHBOARD ===== -->
+<ng-container *ngIf="!isAdmin">
+  <!-- ===== HERO ===== -->
+  <section class="hero">
   <div class="hero-bg-particles"></div>
   <div class="hero-content animate-fade-in-up">
     <h1 class="hero-title">
@@ -79,37 +81,69 @@
     </div>
   </div>
 </section>
+</ng-container>
 
-<!-- ===== LOGS SECTION ===== -->
-<section class="logs-section">
-  <button class="logs-toggle" (click)="toggleLogs()">
-    <span>📊 Registro de Visitantes</span>
-    <span class="toggle-icon" [class.open]="showLogs">▼</span>
-  </button>
-  <div class="logs-body" *ngIf="showLogs">
-    <table class="logs-table">
-      <thead>
-        <tr>
-          <th>Nombre</th>
-          <th>Correo</th>
-          <th>Fecha/Hora Entrada</th>
-          <th>Duración</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let log of logs">
-          <td>{{ log.name }}</td>
-          <td>{{ log.email }}</td>
-          <td>{{ log.entryTime }}</td>
-          <td>{{ log.durationSeconds }}s</td>
-        </tr>
-        <tr *ngIf="logs.length === 0">
-          <td colspan="4" class="no-data">Aún no hay registros. ¡Tú eres el primero!</td>
-        </tr>
-      </tbody>
-    </table>
+<!-- ===== ADMIN DASHBOARD ===== -->
+<ng-container *ngIf="isAdmin">
+  <div class="admin-container animate-fade-in-up">
+    <h1 class="admin-main-title">Panel de Administración</h1>
+
+    <div class="admin-tabs-nav">
+      <button class="admin-tab-btn" [class.active]="activeAdminTab === 'visitantes'" (click)="setAdminTab('visitantes')">
+        📊 Registro de Visitantes
+      </button>
+      <button class="admin-tab-btn" [class.active]="activeAdminTab === 'estudiantes'" (click)="setAdminTab('estudiantes')">
+        🎓 Estudiantes Inscritos
+      </button>
+      <button class="admin-tab-btn" [class.active]="activeAdminTab === 'evaluaciones'" (click)="setAdminTab('evaluaciones')">
+        📝 Resultado de Evaluaciones
+      </button>
+    </div>
+
+    <div class="admin-content-box">
+      <!-- PESTAÑA VISITANTES -->
+      <div *ngIf="activeAdminTab === 'visitantes'" class="logs-body open">
+        <table class="logs-table">
+          <thead>
+            <tr>
+              <th>Nombre</th>
+              <th>Correo</th>
+              <th>Fecha/Hora Entrada</th>
+              <th>Duración</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let log of logs">
+              <td>{{ log.name }}</td>
+              <td>{{ log.email }}</td>
+              <td>{{ log.entryTime }}</td>
+              <td>{{ log.durationSeconds }}s</td>
+            </tr>
+            <tr *ngIf="logs.length === 0">
+              <td colspan="4" class="no-data">Aún no hay registros.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- PESTAÑA ESTUDIANTES -->
+      <div *ngIf="activeAdminTab === 'estudiantes'" class="pending-section">
+        <h2>Listado de Estudiantes Inscritos</h2>
+        <p class="pending-notice">
+          ⚙️ Esta sección estará disponible próximamente cuando se finalice la integración con la base de datos (MongoDB).
+        </p>
+      </div>
+
+      <!-- PESTAÑA EVALUACIONES -->
+      <div *ngIf="activeAdminTab === 'evaluaciones'" class="pending-section">
+        <h2>Resultado de Evaluaciones</h2>
+        <p class="pending-notice">
+          ⚙️ Las calificaciones se centralizarán aquí una vez que la base de datos esté completamente conectada.
+        </p>
+      </div>
+    </div>
   </div>
-</section>
+</ng-container>
 
 <!-- ===== FOOTER INSTITUCIONAL ===== -->
 <footer class="institutional-footer">

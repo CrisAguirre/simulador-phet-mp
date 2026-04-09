@@ -102,7 +102,7 @@ export class EvaluacionComponent implements OnInit, OnDestroy {
   startTimerForCurrentQuestion(): void {
     this.clearTimer();
     const currentQ = this.questions[this.currentQuestionIndex];
-    this.timeLeft = currentQ.type === 'teoria' ? 60 : 90;
+    this.timeLeft = currentQ.type === 'teoria' ? 60 : 150;
     
     this.timerInterval = setInterval(() => {
       this.timeLeft--;

@@ -25,6 +25,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
   activeTimeSeconds: number = 0;
   timerInterval: any;
   showLogs: boolean = false;
+  isAdmin: boolean = false;
+  activeAdminTab: string = 'visitantes';
 
   talleres: Taller[] = [
     {
@@ -74,6 +76,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     }
 
     this.currentUser = this.authService.getCurrentUser();
+    this.isAdmin = this.currentUser?.role === 'admin';
     this.logs = this.authService.getLogs();
 
     this.timerInterval = setInterval(() => {
@@ -98,6 +101,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   toggleLogs(): void {
     this.showLogs = !this.showLogs;
+  }
+
+  setAdminTab(tab: string): void {
+    this.activeAdminTab = tab;
   }
 
   logout(): void {
