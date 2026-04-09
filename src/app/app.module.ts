@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -11,6 +12,7 @@ import { MuaComponent } from './components/talleres/mua/mua.component';
 import { CaidaLibreComponent } from './components/talleres/caida-libre/caida-libre.component';
 import { TiroParabolicoComponent } from './components/talleres/tiro-parabolico/tiro-parabolico.component';
 import { EvaluacionComponent } from './components/evaluacion/evaluacion.component';
+import { JwtInterceptor } from './interceptors/jwt.interceptor';
 
 @NgModule({
   declarations: [
@@ -27,9 +29,12 @@ import { EvaluacionComponent } from './components/evaluacion/evaluacion.componen
     BrowserModule,
     AppRoutingModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    HttpClientModule
   ],
-  providers: [],
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

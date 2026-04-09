@@ -32,13 +32,15 @@ export class LoginComponent implements OnInit {
   onSubmit(): void {
     if (this.loginForm.valid) {
       const { email, password } = this.loginForm.value;
-      const user = this.authService.login(email, password);
       
-      if (user) {
-        this.router.navigate(['/dashboard']);
-      } else {
-        this.errorMessage = 'Credenciales incorrectas. Verifique su correo o su contraseña generada.';
-      }
+      this.authService.login(email, password).subscribe({
+        next: (response) => {
+          this.router.navigate(['/dashboard']);
+        },
+        error: (err) => {
+          this.errorMessage = err.error?.message || 'Error al iniciar sesión. Verifique sus credenciales.';
+        }
+      });
     }
   }
 

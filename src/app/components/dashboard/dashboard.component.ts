@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
-import { AuthService, SessionLog } from '../../services/auth.service';
+import { AuthService } from '../../services/auth.service';
+import { AdminService } from '../../services/admin.service';
 
 interface Taller {
   id: string;
@@ -21,7 +22,11 @@ interface Taller {
 })
 export class DashboardComponent implements OnInit, OnDestroy {
   currentUser: any;
-  logs: SessionLog[] = [];
+  logs: any[] = [];
+  usuarios: any[] = [];
+  evaluaciones: any[] = [];
+  estadisticas: any = null;
+
   activeTimeSeconds: number = 0;
   timerInterval: any;
   showLogs: boolean = false;
@@ -66,6 +71,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   constructor(
     private authService: AuthService,
+    private adminService: AdminService,
     private router: Router
   ) {}
 
@@ -77,12 +83,44 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
     this.currentUser = this.authService.getCurrentUser();
     this.isAdmin = this.currentUser?.role === 'admin';
-    this.logs = this.authService.getLogs();
 
-    this.timerInterval = setInterval(() => {
-      const now = new Date().getTime();
-      this.activeTimeSeconds = Math.floor((now - this.currentUser.entryTimestamp) / 1000);
-    }, 1000);
+    if (this.isAdmin) {
+      this.loadAdminData();
+    } else {
+      const loginTimeStr = localStorage.getItem('PHET_SESSION_START');
+      const loginTime = loginTimeStr ? parseInt(loginTimeStr, 10) : new Date().getTime();
+      
+      this.timerInterval = setInterval(() => {
+        const now = new Date().getTime();
+        this.activeTimeSeconds = Math.floor((now - loginTime) / 1000);
+      }, 1000);
+    }
+  }
+
+  loadAdminData(): void {
+    this.adminService.getVisitantes().subscribe(res => {
+      if (res.status === 'success') {
+        this.logs = res.data.sessions;
+      }
+    });
+
+    this.adminService.getEstudiantes().subscribe(res => {
+      if (res.status === 'success') {
+        this.usuarios = res.data.users.filter((u: any) => u.role === 'student');
+      }
+    });
+
+    this.adminService.getEvaluaciones().subscribe(res => {
+      if (res.status === 'success') {
+        this.evaluaciones = res.data.evaluaciones;
+      }
+    });
+    
+    this.adminService.getEstadisticasEvaluaciones().subscribe(res => {
+      if(res.status === 'success') {
+        this.estadisticas = res.data.porTaller;
+      }
+    });
   }
 
   ngOnDestroy(): void {

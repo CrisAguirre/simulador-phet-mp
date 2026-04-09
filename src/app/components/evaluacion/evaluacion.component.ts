@@ -1,5 +1,6 @@
 import { Component, OnInit, HostListener, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
 import html2canvas from 'html2canvas';
 import { jsPDF } from 'jspdf';
 
@@ -41,7 +42,11 @@ export class EvaluacionComponent implements OnInit, OnDestroy {
   showWarning: boolean = false;
   warningMessage: string = '';
 
-  constructor(private route: ActivatedRoute, private router: Router) { }
+  constructor(
+    private route: ActivatedRoute, 
+    private router: Router,
+    private http: HttpClient
+  ) { }
 
   ngOnInit(): void {
     this.taller = this.route.snapshot.paramMap.get('taller') || '';
@@ -151,7 +156,7 @@ export class EvaluacionComponent implements OnInit, OnDestroy {
     const percentage = (this.score / this.questions.length) * 100;
     this.passed = percentage >= 70;
 
-    // Save to localStorage
+    // Save to localStorage for instant local access
     const result = {
       score: this.score,
       total: this.questions.length,
@@ -160,6 +165,24 @@ export class EvaluacionComponent implements OnInit, OnDestroy {
     };
     localStorage.setItem(`eval_${this.taller}_${this.studentEmail}`, JSON.stringify(result));
     this.previousScore = this.score;
+
+    // Save to MongoDB Backend
+    const userString = localStorage.getItem('PHET_USER');
+    if (userString) {
+      const user = JSON.parse(userString);
+      if (user.role !== 'admin') {
+        this.http.post('http://localhost:3000/evaluaciones', {
+          userId: user.id || user._id,
+          email: user.email,
+          taller: this.getWorkshopName(),
+          score: this.score,
+          totalQuestions: this.questions.length,
+          results: { passed: this.passed, percentage }
+        }).subscribe({
+          error: (err) => console.error('Error guardando evaluación en BD:', err)
+        });
+      }
+    }
   }
 
   closeWarning(): void {

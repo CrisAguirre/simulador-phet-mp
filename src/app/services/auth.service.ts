@@ -1,170 +1,97 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable, BehaviorSubject, tap } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 export interface User {
+  id?: string;
   email: string;
-  name: string;
-  age: number;
+  name?: string; // Optional, as backend currently only requires email
+  age?: number;
   password?: string;
   role?: string;
+  createdAt?: string;
 }
 
 export interface SessionLog {
   email: string;
-  name: string;
+  name?: string;
   entryTime: string;
-  durationSeconds: number;
+  durationSeconds?: number;
+  loginTime?: string; // Backend uses loginTime
 }
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private readonly USERS_KEY = 'STUDENTS_DB';
-  private readonly LOGS_KEY = 'STUDENT_LOGS';
-  private readonly ACTIVE_SESSION_KEY = 'ACTIVE_STUDENT_SESSION';
+  private apiUrl = environment.apiUrl;
+  private readonly TOKEN_KEY = 'PHET_TOKEN';
+  private readonly CURRENT_USER_KEY = 'PHET_USER';
+  private readonly SESSION_START_KEY = 'PHET_SESSION_START';
 
-  constructor() {
-    this.ensureDefaultUser();
-  }
+  // Observable for auth state
+  private currentUserSubject = new BehaviorSubject<User | null>(this.getCurrentUser());
+  public currentUser$ = this.currentUserSubject.asObservable();
 
-  private ensureDefaultUser(): void {
-    const users = this.getDbData(this.USERS_KEY);
-    const defaultEmail = 'invitado@phet.com';
-    const defaultPassword = '123456';
-
-    if (!users.find(u => u.email === defaultEmail)) {
-      users.push({
-        email: defaultEmail,
-        name: 'Usuario Invitado',
-        age: 18,
-        password: defaultPassword,
-        role: 'student'
-      });
-      this.setDbData(this.USERS_KEY, users);
-    }
-
-    const adminEmail = 'admin@phet.com';
-    const adminPassword = 'phet2026';
-    if (!users.find(u => u.email === adminEmail)) {
-      users.push({
-        email: adminEmail,
-        name: 'Administrador',
-        age: 30,
-        password: adminPassword,
-        role: 'admin'
-      });
-      this.setDbData(this.USERS_KEY, users);
-    }
-  }
-
-  // Utils for Local Storage
-  private getDbData(key: string): any[] {
-    const data = localStorage.getItem(key);
-    return data ? JSON.parse(data) : [];
-  }
-
-  private setDbData(key: string, data: any[]): void {
-    localStorage.setItem(key, JSON.stringify(data));
-  }
+  constructor(private http: HttpClient) {}
 
   // Auth Methods
-  register(userData: User): string {
-    const users = this.getDbData(this.USERS_KEY);
-
-    // Normalize email
-    userData.email = userData.email.trim().toLowerCase();
-
-    // Check if email already exists
-    if (users.find(u => u.email.trim().toLowerCase() === userData.email)) {
-      throw new Error('El correo ya está registrado.');
+  register(userData: User): Observable<any> {
+    // Generate random password if not provided
+    if (!userData.password) {
+      userData.password = Math.random().toString(36).substring(2, 8).toUpperCase();
     }
-
-    // Generate random password
-    const generatedPassword = Math.random().toString(36).substring(2, 8).toUpperCase();
-    userData.password = generatedPassword;
-
-    users.push(userData);
-    this.setDbData(this.USERS_KEY, users);
-
-    return generatedPassword;
+    
+    return this.http.post(`${this.apiUrl}/auth/register`, {
+      email: userData.email,
+      password: userData.password
+    }).pipe(
+      tap(() => {
+        // We will return the generated password to show it to the user
+      })
+    );
   }
 
-  login(email: string, password: string): User | null {
-    const users = this.getDbData(this.USERS_KEY);
-    const normalizedEmail = email.trim().toLowerCase();
-    const normalizedPassword = password.trim();
+  login(email: string, password: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/auth/login`, { email, password }).pipe(
+      tap((response: any) => {
+        if (response.status === 'success' && response.token) {
+          // Guardar Token y datos de usuario en localStorage
+          localStorage.setItem(this.TOKEN_KEY, response.token);
+          localStorage.setItem(this.CURRENT_USER_KEY, JSON.stringify(response.data.user));
+          
+          // Registrar tiempo de entrada al log normal
+          localStorage.setItem(this.SESSION_START_KEY, new Date().getTime().toString());
+          
+          this.currentUserSubject.next(response.data.user);
 
-    // Verificación "quemada" (hardcoded) para que el usuario por defecto siempre funcione
-    // incluso si hay algún problema con localStorage en el futuro despliegue (ej. Vercel).
-    if (normalizedEmail === 'invitado@phet.com' && normalizedPassword === '123456') {
-      const defaultUser = { email: 'invitado@phet.com', name: 'Usuario Invitado', age: 18, password: '123456', role: 'student' };
-      const sessionData = {
-        ...defaultUser,
-        entryTimestamp: new Date().getTime()
-      };
-      localStorage.setItem(this.ACTIVE_SESSION_KEY, JSON.stringify(sessionData));
-      return defaultUser;
-    }
-
-    if (normalizedEmail === 'admin@admin.com' && normalizedPassword === 'admin') {
-      const adminUser = { email: 'admin@admin.com', name: 'Administrador', age: 30, password: 'admin', role: 'admin' };
-      const sessionData = {
-        ...adminUser,
-        entryTimestamp: new Date().getTime()
-      };
-      localStorage.setItem(this.ACTIVE_SESSION_KEY, JSON.stringify(sessionData));
-      return adminUser;
-    }
-
-    const user = users.find(u =>
-      u.email.trim().toLowerCase() === normalizedEmail &&
-      u.password === normalizedPassword
+          // Hacer log en el backend para trackear visitantes
+          if (response.data.user.role !== 'admin') {
+               this.http.post(`${this.apiUrl}/sessions`, {
+                 userId: response.data.user.id,
+                 email: response.data.user.email,
+                 deviceInfo: navigator.userAgent
+               }).subscribe();
+          }
+        }
+      })
     );
-
-    if (user) {
-      // Create session
-      const sessionData = {
-        ...user,
-        entryTimestamp: new Date().getTime()
-      };
-      localStorage.setItem(this.ACTIVE_SESSION_KEY, JSON.stringify(sessionData));
-      return user;
-    }
-    return null;
   }
 
   logout(): void {
-    const sessionString = localStorage.getItem(this.ACTIVE_SESSION_KEY);
-    if (sessionString) {
-      const session = JSON.parse(sessionString);
-      const exitTimestamp = new Date().getTime();
-      const duration = Math.floor((exitTimestamp - session.entryTimestamp) / 1000); // in seconds
-
-      const log: SessionLog = {
-        email: session.email,
-        name: session.name,
-        entryTime: new Date(session.entryTimestamp).toLocaleString(),
-        durationSeconds: duration
-      };
-
-      const logs = this.getDbData(this.LOGS_KEY);
-      logs.push(log);
-      this.setDbData(this.LOGS_KEY, logs);
-
-      localStorage.removeItem(this.ACTIVE_SESSION_KEY);
-    }
+    localStorage.removeItem(this.TOKEN_KEY);
+    localStorage.removeItem(this.CURRENT_USER_KEY);
+    localStorage.removeItem(this.SESSION_START_KEY);
+    this.currentUserSubject.next(null);
   }
 
   isLoggedIn(): boolean {
-    return !!localStorage.getItem(this.ACTIVE_SESSION_KEY);
+    return !!localStorage.getItem(this.TOKEN_KEY);
   }
 
-  getCurrentUser(): any {
-    const data = localStorage.getItem(this.ACTIVE_SESSION_KEY);
+  getCurrentUser(): User | null {
+    const data = localStorage.getItem(this.CURRENT_USER_KEY);
     return data ? JSON.parse(data) : null;
-  }
-
-  getLogs(): SessionLog[] {
-    return this.getDbData(this.LOGS_KEY);
   }
 }

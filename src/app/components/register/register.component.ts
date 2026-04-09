@@ -30,13 +30,20 @@ export class RegisterComponent implements OnInit {
   onSubmit(): void {
     if (this.registerForm.valid) {
       this.errorMessage = '';
-      try {
-        const password = this.authService.register(this.registerForm.value);
-        this.generatedPassword = password;
-        this.registerForm.reset();
-      } catch (err: any) {
-        this.errorMessage = err.message;
-      }
+      
+      const userData = this.registerForm.value;
+      const generatedPass = Math.random().toString(36).substring(2, 8).toUpperCase();
+      userData.password = generatedPass;
+
+      this.authService.register(userData).subscribe({
+        next: () => {
+          this.generatedPassword = generatedPass;
+          this.registerForm.reset();
+        },
+        error: (err) => {
+          this.errorMessage = err.error?.message || 'Error al registrar al estudiante.';
+        }
+      });
     }
   }
 
