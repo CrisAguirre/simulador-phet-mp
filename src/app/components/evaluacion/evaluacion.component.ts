@@ -38,6 +38,7 @@ export class EvaluacionComponent implements OnInit, OnDestroy {
   studentEmail: string = '';
   passed: boolean = false;
   previousScore: number | null = null;
+  attempts: number = 0;
 
   // Modals/Warnings
   showWarning: boolean = false;
@@ -61,9 +62,9 @@ export class EvaluacionComponent implements OnInit, OnDestroy {
 
     // Verificar intentos previos (máximo 2 por taller)
     const attemptsKey = `eval_attempts_${this.taller}_${this.studentEmail}`;
-    const attempts = parseInt(localStorage.getItem(attemptsKey) || '0', 10);
+    this.attempts = parseInt(localStorage.getItem(attemptsKey) || '0', 10);
 
-    if (attempts >= 2) {
+    if (this.attempts >= 2) {
       const existingResult = localStorage.getItem(`eval_${this.taller}_${this.studentEmail}`);
       if (existingResult) {
         const parsed = JSON.parse(existingResult);
@@ -180,8 +181,8 @@ export class EvaluacionComponent implements OnInit, OnDestroy {
 
     // Incrementar contador de intentos
     const attemptsKey = `eval_attempts_${this.taller}_${this.studentEmail}`;
-    const attempts = parseInt(localStorage.getItem(attemptsKey) || '0', 10);
-    localStorage.setItem(attemptsKey, (attempts + 1).toString());
+    this.attempts = parseInt(localStorage.getItem(attemptsKey) || '0', 10) + 1;
+    localStorage.setItem(attemptsKey, this.attempts.toString());
 
     this.previousScore = percentage;
 
@@ -200,7 +201,7 @@ export class EvaluacionComponent implements OnInit, OnDestroy {
             passed: this.passed,
             percentage,
             correctAnswers: this.score,
-            attempt: attempts + 1
+            attempt: this.attempts
           }
         }).subscribe({
           next: () => console.log('Evaluación guardada en BD'),
@@ -212,6 +213,11 @@ export class EvaluacionComponent implements OnInit, OnDestroy {
 
   closeWarning(): void {
     this.showWarning = false;
+  }
+
+  retryEvaluation(): void {
+    this.isFinished = false;
+    this.startEvaluation();
   }
 
   goBack(): void {
