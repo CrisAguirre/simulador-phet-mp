@@ -31,7 +31,7 @@ export class AuthService {
     const users = this.getDbData(this.USERS_KEY);
     const defaultEmail = 'invitado@phet.com';
     const defaultPassword = '123456';
-    
+
     if (!users.find(u => u.email === defaultEmail)) {
       users.push({
         email: defaultEmail,
@@ -42,9 +42,9 @@ export class AuthService {
       });
       this.setDbData(this.USERS_KEY, users);
     }
-    
-    const adminEmail = 'admin@admin.com';
-    const adminPassword = 'admin';
+
+    const adminEmail = 'admin@phet.com';
+    const adminPassword = 'phet2026';
     if (!users.find(u => u.email === adminEmail)) {
       users.push({
         email: adminEmail,
@@ -70,7 +70,7 @@ export class AuthService {
   // Auth Methods
   register(userData: User): string {
     const users = this.getDbData(this.USERS_KEY);
-    
+
     // Normalize email
     userData.email = userData.email.trim().toLowerCase();
 
@@ -116,11 +116,11 @@ export class AuthService {
       return adminUser;
     }
 
-    const user = users.find(u => 
-      u.email.trim().toLowerCase() === normalizedEmail && 
+    const user = users.find(u =>
+      u.email.trim().toLowerCase() === normalizedEmail &&
       u.password === normalizedPassword
     );
-    
+
     if (user) {
       // Create session
       const sessionData = {
@@ -139,7 +139,7 @@ export class AuthService {
       const session = JSON.parse(sessionString);
       const exitTimestamp = new Date().getTime();
       const duration = Math.floor((exitTimestamp - session.entryTimestamp) / 1000); // in seconds
-      
+
       const log: SessionLog = {
         email: session.email,
         name: session.name,
