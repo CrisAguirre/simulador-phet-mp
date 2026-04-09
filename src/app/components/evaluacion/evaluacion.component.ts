@@ -38,6 +38,7 @@ export class EvaluacionComponent implements OnInit, OnDestroy {
   studentEmail: string = '';
   passed: boolean = false;
   previousScore: number | null = null;
+  attempts: number = 0;
   
   // Modals/Warnings
   showWarning: boolean = false;
@@ -56,8 +57,10 @@ export class EvaluacionComponent implements OnInit, OnDestroy {
     // Check if already taken
     const existingResult = localStorage.getItem(`eval_${this.taller}_${this.studentEmail}`);
     if (existingResult) {
-      this.previousScore = JSON.parse(existingResult).score;
-      this.passed = JSON.parse(existingResult).passed;
+      const data = JSON.parse(existingResult);
+      this.previousScore = data.score;
+      this.passed = data.passed;
+      this.attempts = data.attempts || 1;
       this.isFinished = true;
     }
 
@@ -156,12 +159,14 @@ export class EvaluacionComponent implements OnInit, OnDestroy {
 
     const percentage = (this.score / this.questions.length) * 100;
     this.passed = percentage >= 70;
+    this.attempts++;
 
     // Save to localStorage for instant local access
     const result = {
       score: this.score,
       total: this.questions.length,
       passed: this.passed,
+      attempts: this.attempts,
       date: new Date().toISOString()
     };
     localStorage.setItem(`eval_${this.taller}_${this.studentEmail}`, JSON.stringify(result));
@@ -188,6 +193,19 @@ export class EvaluacionComponent implements OnInit, OnDestroy {
 
   closeWarning(): void {
     this.showWarning = false;
+  }
+
+  retryEvaluation(): void {
+    this.hasStarted = false;
+    this.isFinished = false;
+    this.score = 0;
+    this.currentQuestionIndex = 0;
+    this.tabSwitches = 0;
+    this.showWarning = false;
+    this.warningMessage = '';
+    
+    // Volver a mezclar preguntas para el nuevo intento
+    this.questions.sort(() => Math.random() - 0.5);
   }
 
   goBack(): void {
